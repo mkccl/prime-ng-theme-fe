@@ -1,0 +1,67 @@
+<div class="designer-layout">
+  <!-- Top Header -->
+  <header class="designer-header">
+    <div class="flex items-center gap-3">
+      <a routerLink="/" class="designer-logo" title="Back to home">
+        <i class="pi pi-prime designer-logo-icon"></i>
+        <span class="designer-logo-text">Theme Studio</span>
+      </a>
+      <div class="designer-header-divider"></div>
+      @if (activeView() === 'editor') {
+        <button
+          (click)="backToCreate()"
+          class="p-1 rounded hover:bg-[var(--p-content-hover-background)]"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+      }
+      <h1 class="text-xl font-bold m-0">{{ themeName() }}</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <!-- TODO: re-enable when blocks feature is ready -->
+      <button
+        (click)="toggleDarkMode()"
+        class="p-2 rounded-lg hover:bg-[var(--p-content-hover-background)]"
+        title="Toggle dark mode"
+      >
+        <i class="pi" [class.pi-moon]="!isDark()" [class.pi-sun]="isDark()"></i>
+      </button>
+    </div>
+  </header>
+
+  <p-splitter styleClass="designer-splitter" [panelSizes]="[35, 65]" [minSizes]="[20, 30]">
+    <ng-template #panel>
+      <aside class="designer-sidebar">
+        @if (activeView() === 'create') {
+          <design-create-theme />
+        } @else {
+          <div class="designer-editor-area">
+            <design-editor />
+          </div>
+          <div class="designer-footer">
+            <design-editor-footer />
+          </div>
+        }
+      </aside>
+    </ng-template>
+    <ng-template #panel>
+      <main class="designer-preview">
+        @if (activeView() === 'editor') {
+          <design-preview />
+        } @else {
+          <div class="flex items-center justify-center h-full text-[var(--p-text-muted-color)]">
+            <div class="text-center">
+              <i class="pi pi-palette text-6xl mb-4 block"></i>
+              <p class="text-xl">Create a theme to see the preview</p>
+            </div>
+          </div>
+        }
+      </main>
+    </ng-template>
+  </p-splitter>
+
+  <footer class="app-footer">
+    made by ccl with <i class="pi pi-heart-fill"></i> open source on
+    <i class="pi pi-github"></i> github
+  </footer>
+</div>

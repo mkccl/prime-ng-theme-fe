@@ -2,6 +2,7 @@
 
 # Compiled output
 /dist
+/prime-ng-theme-fe
 /tmp
 /out-tsc
 /bazel-out

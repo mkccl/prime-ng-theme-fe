@@ -1,0 +1,38 @@
+<div class="block-card">
+  <div class="block-card-header">
+    <div>
+      <h3 class="text-sm font-semibold m-0">{{ block().name }}</h3>
+      <p class="text-xs text-surface-500 m-0">{{ block().description }}</p>
+    </div>
+    <button type="button" class="get-code-btn" (click)="openCodeDialog()">
+      <i class="pi pi-code"></i> Get the code
+    </button>
+  </div>
+
+  <div class="block-card-stage" #stage>
+    <div
+      class="block-card-preview-wrapper"
+      [style.width]="containerWidth() === null ? '100%' : containerWidth() + 'px'"
+    >
+      <div class="block-card-preview">
+        <iframe
+          class="preview-iframe"
+          [class.drag-active]="isDragging()"
+          [src]="previewUrl()"
+          [title]="block().name + ' preview'"
+          loading="lazy"
+        ></iframe>
+      </div>
+      <div class="resize-handle" (mousedown)="onResizeStart($event)">
+        <div class="resize-handle-pill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-code-dialog
+  [(visible)]="dialogVisible"
+  [name]="block().name"
+  [htmlCode]="block().htmlCode"
+  [tsCode]="block().tsCode"
+/>

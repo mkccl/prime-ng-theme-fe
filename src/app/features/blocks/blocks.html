@@ -1,0 +1,27 @@
+<div class="blocks-layout">
+  <header class="blocks-header">
+    <div class="flex items-center gap-3">
+      <h1 class="text-xl font-bold m-0">UI Blocks</h1>
+      <span class="text-xs text-surface-400">{{ blocks.length }} sidebar layouts</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <a routerLink="/designer" class="blocks-header-link">
+        <i class="pi pi-palette mr-1.5"></i>Designer
+      </a>
+      <app-theme-switcher />
+    </div>
+  </header>
+
+  <main class="blocks-content">
+    <div class="blocks-list">
+      @for (block of blocks; track block.id) {
+        <app-block-card [block]="block" />
+      }
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    made by ccl with <i class="pi pi-heart-fill"></i> open source on
+    <i class="pi pi-github"></i> github
+  </footer>
+</div>

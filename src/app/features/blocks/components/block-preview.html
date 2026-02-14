@@ -1,0 +1,7 @@
+@if (previewComponent()) {
+  <div class="block-preview-wrapper">
+    <ng-container *ngComponentOutlet="previewComponent()" />
+  </div>
+} @else {
+  <div class="block-preview-not-found">Block not found</div>
+}

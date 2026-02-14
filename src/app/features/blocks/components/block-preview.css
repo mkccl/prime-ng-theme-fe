@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--p-surface-0);
+}
+
+.block-preview-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.block-preview-not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--p-surface-400);
+  font-size: 0.875rem;
+}

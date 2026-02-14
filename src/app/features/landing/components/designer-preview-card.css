@@ -1,0 +1,134 @@
+.preview-window {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--p-content-border-color);
+  background: var(--p-content-background);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    0 12px 24px -8px rgba(0, 0, 0, 0.1);
+  max-width: 640px;
+  width: 100%;
+}
+
+.preview-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--p-surface-100);
+  border-bottom: 1px solid var(--p-content-border-color);
+}
+
+:host-context(.p-dark) .preview-titlebar {
+  background: var(--p-surface-800);
+}
+
+.preview-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.preview-dot--red {
+  background: #ff5f57;
+}
+
+.preview-dot--yellow {
+  background: #ffbd2e;
+}
+
+.preview-dot--green {
+  background: #28c840;
+}
+
+.preview-titlebar-text {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+  margin-left: 0.5rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+.preview-body {
+  display: flex;
+  min-height: 260px;
+}
+
+.preview-sidebar {
+  width: 140px;
+  border-right: 1px solid var(--p-content-border-color);
+  padding: 0.75rem 0;
+  flex-shrink: 0;
+}
+
+.preview-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  color: var(--p-text-muted-color);
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.preview-tab--active {
+  color: var(--p-primary-color);
+  background: color-mix(in srgb, var(--p-primary-color), transparent 90%);
+  border-right: 2px solid var(--p-primary-color);
+}
+
+.preview-tab i {
+  font-size: 0.875rem;
+}
+
+.preview-main {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.preview-section-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--p-text-muted-color);
+  margin-bottom: 0.75rem;
+}
+
+.preview-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.preview-swatch {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0.375rem;
+  transition: background 0.3s;
+}
+
+.preview-swatch span {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+.preview-swatch--main {
+  grid-column: span 2;
+}
+
+@media (max-width: 640px) {
+  .preview-sidebar {
+    display: none;
+  }
+
+  .preview-swatch-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,20 @@
+<div class="theme-bar">
+  <div class="theme-bar-swatches">
+    @for (c of themeState.primaryColors; track c.name) {
+      <button
+        class="theme-bar-swatch"
+        [class.theme-bar-swatch--active]="themeState.selectedPrimary() === c.name"
+        [style.backgroundColor]="c.color"
+        [title]="c.name"
+        (click)="themeState.setPrimary(c.name)"
+      ></button>
+    }
+  </div>
+  <button
+    class="theme-bar-dark-toggle"
+    [title]="themeState.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+    (click)="themeState.toggleDark()"
+  >
+    <i [class]="themeState.isDark() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+  </button>
+</div>

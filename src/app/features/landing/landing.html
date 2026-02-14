@@ -1,0 +1,137 @@
+<!-- Ambient blobs -->
+<div class="ambient" aria-hidden="true">
+  <div class="blob blob--1"></div>
+  <div class="blob blob--2"></div>
+  <div class="blob blob--3"></div>
+</div>
+
+<!-- Nav -->
+<nav class="nav" [class.nav--scrolled]="isScrolled()">
+  <a routerLink="/" class="nav-logo">
+    <i class="pi pi-prime nav-logo-icon"></i>
+    <span class="nav-logo-text">Theme Studio</span>
+  </a>
+  <div class="nav-right">
+    <app-theme-switcher />
+    <a href="https://github.com" target="_blank" rel="noopener" class="nav-github" title="GitHub">
+      <i class="pi pi-github"></i>
+    </a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <span class="hero-badge fade-up" style="--delay: 0s">
+    <i class="pi pi-sparkles"></i>
+    Open Source Theme Designer
+  </span>
+
+  <h1 class="hero-headline fade-up" style="--delay: 0.1s">
+    Design <em>beautiful</em> PrimeNG themes, visually.
+  </h1>
+
+  <p class="hero-subtitle fade-up" style="--delay: 0.2s">
+    Customize every design token, preview changes in real time, and export production-ready themes —
+    no manual CSS required.
+  </p>
+
+  <div class="hero-actions fade-up" style="--delay: 0.3s">
+    <a routerLink="/designer">
+      <p-button label="Start Designing" icon="pi pi-arrow-right" iconPos="right" />
+    </a>
+  </div>
+</section>
+
+<!-- Designer Preview -->
+<!--<section class="designer-preview-section fade-up" style="&#45;&#45;delay: 0.5s">-->
+<!--  <app-designer-preview-card />-->
+<!--</section>-->
+
+<!-- Component Preview -->
+<section class="components-section">
+  <div class="section-header fade-up" style="--delay: 0.1s">
+    <div class="section-tag">Live Preview</div>
+    <h2 class="section-title">See your theme on real components</h2>
+    <p class="section-subtitle">
+      These PrimeNG components react instantly when you change the theme above.
+    </p>
+  </div>
+
+  <div class="components-grid">
+    <!-- Buttons -->
+    <div class="component-card fade-up" style="--delay: 0.1s">
+      <span class="component-card-label">Buttons</span>
+      <div class="component-card-content">
+        <p-button label="Primary" />
+        <p-button label="Secondary" severity="secondary" />
+        <p-button label="Outlined" [outlined]="true" />
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="component-card fade-up" style="--delay: 0.15s">
+      <span class="component-card-label">Tags</span>
+      <div class="component-card-content">
+        <p-tag value="New" />
+        <p-tag value="Info" severity="info" />
+        <p-tag value="Success" severity="success" />
+        <p-tag value="Warn" severity="warn" />
+        <p-tag value="Danger" severity="danger" />
+      </div>
+    </div>
+
+    <!-- Form Inputs -->
+    <div class="component-card fade-up" style="--delay: 0.2s">
+      <span class="component-card-label">Inputs</span>
+      <div class="component-card-content">
+        <input pInputText placeholder="Text input" />
+        <p-select
+          [options]="previewCities"
+          placeholder="Select"
+          optionLabel="name"
+          class="w-full"
+          style="max-width: 180px"
+        />
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="component-card fade-up" style="--delay: 0.25s">
+      <span class="component-card-label">Progress</span>
+      <div class="component-card-content" style="width: 100%">
+        <p-progress-bar [value]="65" style="width: 100%; height: 0.75rem" [showValue]="false" />
+      </div>
+    </div>
+
+    <!-- Toggles -->
+    <div class="component-card fade-up" style="--delay: 0.3s">
+      <span class="component-card-label">Toggles</span>
+      <div class="component-card-content">
+        <p-checkbox [(ngModel)]="previewChecked" [binary]="true" inputId="preview-check" />
+        <label for="preview-check" style="font-size: 0.875rem">Checkbox</label>
+        <p-toggleswitch [(ngModel)]="previewSwitch" />
+      </div>
+    </div>
+
+    <!-- Badges & Chips -->
+    <div class="component-card fade-up" style="--delay: 0.35s">
+      <span class="component-card-label">Badges &amp; Chips</span>
+      <div class="component-card-content">
+        <p-badge value="4" />
+        <p-badge value="2" severity="success" />
+        <p-chip label="Angular" />
+        <p-chip label="PrimeNG" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <span>made by ccl with</span>
+  <i class="pi pi-heart-fill"></i>
+  <span>open source on</span>
+  <a href="https://github.com" target="_blank" rel="noopener">
+    <i class="pi pi-github"></i> GitHub
+  </a>
+</footer>

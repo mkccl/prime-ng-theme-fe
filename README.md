@@ -1,59 +1,65 @@
-# PrimeNgThemeFe
+# PrimeNG Theme Studio
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+A visual theme designer for [PrimeNG](https://primeng.org) built with Angular 21. Customize every design token, preview changes in real time, and export production-ready themes — no manual CSS required.
 
-## Development server
+**Live:** [theme-designer.ccl.wtf](https://theme-designer.ccl.wtf)
 
-To start a local development server, run:
+![Landing Page](docs/landing.png)
 
-```bash
-ng serve
-```
+## Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Visual token editor** — Modify primitive colors, border radii, semantic tokens, and per-component overrides through an intuitive split-pane UI
+- **Live preview** — See buttons, forms, tables, tags, and more update instantly as you tweak tokens
+- **Multiple presets** — Start from Aura, Material, Lara, or Nora and make it yours
+- **Dark mode** — Toggle between light and dark to preview both variants
+- **Export** — Download a production-ready TypeScript preset file, or copy a base64 token to share/restore your theme later
+- **Theme switcher** — Quickly change primary and surface palettes, presets, ripple, and RTL from the landing page
 
-## Code scaffolding
+![Theme Designer](docs/designer.png)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tech Stack
 
-```bash
-ng generate component component-name
-```
+- **Angular 21** — Standalone components, signals, OnPush change detection
+- **PrimeNG 21** — Component library and design token system
+- **Tailwind CSS 4** — Utility-first styling via CSS-only config
+- **Vitest** — Fast unit testing
+- **@primeuix/themes** — Runtime palette and preset manipulation
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Getting Started
 
 ```bash
-ng build
+# Install dependencies
+npm install
+
+# Start dev server at localhost:4200
+npm start
+
+# Production build
+npm run build
+
+# Run tests
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Project Structure
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```
+src/app/
+  features/
+    landing/          # Landing page with hero, component preview, theme switcher
+    designer/         # Theme designer with split-pane editor + live preview
+      components/     # Editor tabs (primitive, semantic, component, settings, custom)
+      services/       # ThemeDesignerService — central state and export logic
+    blocks/           # UI block showcase (WIP, routes deactivated)
 ```
 
-## Running end-to-end tests
+## How It Works
 
-For end-to-end (e2e) testing, run:
+1. **Create a theme** — Pick a name and base preset (Aura, Material, Lara, or Nora)
+2. **Edit tokens** — Use the tabbed editor to adjust primitive colors, border radii, semantic mappings, component-level overrides, or add custom tokens
+3. **Preview live** — The right panel renders real PrimeNG components with your current theme applied
+4. **Export** — Download a `.ts` preset file ready to drop into `providePrimeNG({ theme: { preset: yourTheme } })`, or copy the base64 token to restore later
 
-```bash
-ng e2e
-```
+## License
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Open source. Made by [ccl](https://github.com/ccl) with love.

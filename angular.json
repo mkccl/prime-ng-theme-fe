@@ -16,7 +16,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "prime-ng-theme-fe",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [

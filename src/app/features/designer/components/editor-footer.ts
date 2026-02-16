@@ -4,13 +4,22 @@ import { Dialog } from 'primeng/dialog';
 import { Textarea } from 'primeng/textarea';
 
 import { ThemeDesignerService } from '../services/theme-designer.service';
+import { HelpDialog } from './help-dialog';
 
 @Component({
   selector: 'design-editor-footer',
   standalone: true,
-  imports: [Button, Dialog, Textarea],
+  imports: [Button, Dialog, HelpDialog, Textarea],
   template: `
     <div class="flex justify-end gap-2">
+      <p-button
+        icon="pi pi-question-circle"
+        severity="secondary"
+        [outlined]="true"
+        [rounded]="true"
+        (click)="openHelpDialog()"
+        title="Documentation"
+      />
       <p-button
         label="Download"
         icon="pi pi-download"
@@ -20,6 +29,8 @@ import { ThemeDesignerService } from '../services/theme-designer.service';
       />
       <p-button label="Apply" icon="pi pi-check" (click)="apply()" />
     </div>
+
+    <design-help-dialog [(helpVisible)]="helpVisible" />
 
     <p-dialog
       header="Export Theme"
@@ -66,8 +77,13 @@ export class EditorFooter {
   private readonly designerService = inject(ThemeDesignerService);
 
   protected readonly dialogVisible = signal(false);
+  protected readonly helpVisible = signal(false);
   protected readonly base64Value = signal('');
   protected readonly copied = signal(false);
+
+  protected openHelpDialog(): void {
+    this.helpVisible.set(true);
+  }
 
   protected openDownloadDialog(): void {
     this.base64Value.set(this.designerService.encodeTheme());

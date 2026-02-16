@@ -1,0 +1,82 @@
+<p-dialog
+  header="Documentation"
+  [(visible)]="helpVisible"
+  [modal]="true"
+  [style]="{ width: '50rem' }"
+  [draggable]="false"
+>
+  <div class="flex flex-col gap-4">
+    <input
+      pInputText
+      type="text"
+      placeholder="Search tokens, concepts..."
+      class="w-full"
+      [value]="searchQuery()"
+      (input)="onSearchInput($event)"
+    />
+
+    @if (filteredContent().length > 0) {
+      <p-accordion [multiple]="true" [value]="[]">
+        @for (category of filteredContent(); track category.name) {
+          <p-accordion-panel [value]="category.name">
+            <p-accordion-header>{{ category.name }}</p-accordion-header>
+            <p-accordion-content>
+              <div class="flex flex-col gap-4">
+                @for (section of category.sections; track section.title) {
+                  <div>
+                    <h4 class="text-base font-semibold m-0 mb-1">{{ section.title }}</h4>
+                    <p class="text-sm text-[var(--p-text-muted-color)] m-0 mb-2">
+                      {{ section.description }}
+                    </p>
+
+                    @if (section.tokens && section.tokens.length > 0) {
+                      <div class="overflow-x-auto mb-2">
+                        <table class="w-full text-sm border-collapse">
+                          <thead>
+                            <tr
+                              class="text-left text-[var(--p-text-muted-color)] border-b border-[var(--p-content-border-color)]"
+                            >
+                              <th class="py-2 pr-3 font-medium">Name</th>
+                              <th class="py-2 pr-3 font-medium">CSS Variable</th>
+                              <th class="py-2 font-medium">Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (token of section.tokens; track token.name) {
+                              <tr
+                                class="border-b border-[var(--p-content-border-color)] last:border-0"
+                              >
+                                <td class="py-2 pr-3 font-mono text-xs">{{ token.name }}</td>
+                                <td class="py-2 pr-3 font-mono text-xs text-[var(--p-text-muted-color)]">
+                                  {{ token.cssVariable }}
+                                </td>
+                                <td class="py-2 text-sm">{{ token.description }}</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    }
+
+                    @if (section.tips && section.tips.length > 0) {
+                      <ul class="m-0 pl-5 text-sm text-[var(--p-text-muted-color)]">
+                        @for (tip of section.tips; track tip) {
+                          <li class="mb-1">{{ tip }}</li>
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              </div>
+            </p-accordion-content>
+          </p-accordion-panel>
+        }
+      </p-accordion>
+    } @else {
+      <div class="text-center py-8 text-[var(--p-text-muted-color)]">
+        <i class="pi pi-search text-3xl mb-3 block"></i>
+        <p class="m-0">No results found for "{{ searchQuery() }}"</p>
+      </div>
+    }
+  </div>
+</p-dialog>

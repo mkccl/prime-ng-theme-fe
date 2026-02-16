@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build", "npm install -g serve"]
+
+[start]
+cmd = "serve -s dist/prime-ng-theme-fe/browser -l 3000"

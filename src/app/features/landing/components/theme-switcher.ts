@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { fromEvent } from 'rxjs';
 
 import { Popover } from 'primeng/popover';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -16,7 +26,7 @@ import { ThemeStateService } from '../services/theme-state.service';
       <i class="pi pi-cog"></i>
     </button>
 
-    <p-popover #op>
+    <p-popover #op appendTo="body">
       <div class="switcher-panel">
         <section>
           <span class="switcher-label">Primary</span>
@@ -210,8 +220,17 @@ import { ThemeStateService } from '../services/theme-state.service';
     }
   `,
 })
-export class ThemeSwitcher {
+export class ThemeSwitcher implements OnInit {
   protected readonly themeState = inject(ThemeStateService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  protected readonly popover = viewChild<Popover>('op');
   protected readonly ripple = signal(false);
   protected readonly rtl = signal(false);
+
+  ngOnInit(): void {
+    fromEvent(window, 'scroll', { passive: true })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.popover()?.hide());
+  }
 }

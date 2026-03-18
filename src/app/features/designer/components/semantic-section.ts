@@ -3,6 +3,21 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { ThemeDesignerService } from '../services/theme-designer.service';
 import { TokenField } from './token-field';
 
+function setObjectProperty(obj: Record<string, unknown>, path: string, value: unknown): void {
+  const segments = path.split('.');
+  let current: Record<string, unknown> = obj;
+
+  for (let i = 0; i < segments.length - 1; i++) {
+    const seg = segments[i];
+    if (current[seg] == null || typeof current[seg] !== 'object') {
+      current[seg] = {};
+    }
+    current = current[seg] as Record<string, unknown>;
+  }
+
+  current[segments[segments.length - 1]] = value;
+}
+
 interface TokenEntry {
   key: string;
   value: unknown;
@@ -23,7 +38,8 @@ interface TokenEntry {
         <div class="grid grid-cols-4 gap-x-2 gap-y-3">
           @for (item of primitiveTokensArray(); track item.key) {
             <design-token-field
-              [(modelValue)]="$any(tokens())[item.key]"
+              [modelValue]="$any(item.value)"
+              (modelValueChange)="onTokenChange(item.key, $event)"
               [label]="camelCaseToSpaces(item.key)"
             />
           }
@@ -74,6 +90,16 @@ export class SemanticSection {
     const last = segments[segments.length - 1] ?? '';
     return this.capitalize(this.camelCaseToSpaces(last));
   });
+
+  protected onTokenChange(key: string, value: string | undefined): void {
+    this.designerService.designer.update((prev) => {
+      const cloned = structuredClone(prev);
+      const semantic = cloned.theme!.preset.semantic as Record<string, unknown>;
+      const fullPath = this.path() + '.' + key;
+      setObjectProperty(semantic, fullPath, value);
+      return cloned;
+    });
+  }
 
   protected camelCaseToSpaces(val: string): string {
     return val.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();

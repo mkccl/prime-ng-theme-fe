@@ -7,6 +7,21 @@ import { ThemeDesignerService } from '../services/theme-designer.service';
 import { SemanticSection } from './semantic-section';
 import { TokenField } from './token-field';
 
+function setObjectProperty(obj: Record<string, unknown>, path: string, value: unknown): void {
+  const segments = path.split('.');
+  let current: Record<string, unknown> = obj;
+
+  for (let i = 0; i < segments.length - 1; i++) {
+    const seg = segments[i];
+    if (current[seg] == null || typeof current[seg] !== 'object') {
+      current[seg] = {};
+    }
+    current = current[seg] as Record<string, unknown>;
+  }
+
+  current[segments[segments.length - 1]] = value;
+}
+
 const SEMANTIC_ORDER = [
   'primary',
   'surface',
@@ -52,7 +67,8 @@ interface TokenEntry {
                 <div class="grid grid-cols-4 gap-x-2 gap-y-3">
                   @for (item of commonPrimitivesArray(); track item.key) {
                     <design-token-field
-                      [(modelValue)]="$any(commonTokens())[item.key]"
+                      [modelValue]="$any(item.value)"
+                      (modelValueChange)="onTokenChange(item.key, $event)"
                       [label]="camelCaseToSpaces(item.key)"
                     />
                   }
@@ -83,7 +99,8 @@ interface TokenEntry {
                         <div class="grid grid-cols-4 gap-x-2 gap-y-3">
                           @for (item of lightPrimitivesArray(); track item.key) {
                             <design-token-field
-                              [(modelValue)]="$any(lightTokens())[item.key]"
+                              [modelValue]="$any(item.value)"
+                              (modelValueChange)="onTokenChange('colorScheme.light.' + item.key, $event)"
                               [label]="camelCaseToSpaces(item.key)"
                             />
                           }
@@ -105,7 +122,8 @@ interface TokenEntry {
                         <div class="grid grid-cols-4 gap-x-2 gap-y-3">
                           @for (item of darkPrimitivesArray(); track item.key) {
                             <design-token-field
-                              [(modelValue)]="$any(darkTokens())[item.key]"
+                              [modelValue]="$any(item.value)"
+                              (modelValueChange)="onTokenChange('colorScheme.dark.' + item.key, $event)"
                               [label]="camelCaseToSpaces(item.key)"
                             />
                           }
@@ -215,6 +233,15 @@ export class SemanticEditor {
       .sort((a, b) => this.semanticSortOrder(a) - this.semanticSortOrder(b))
       .map((key) => ({ key, value: tokens[key] }));
   });
+
+  protected onTokenChange(fullPath: string, value: string | undefined): void {
+    this.designerService.designer.update((prev) => {
+      const cloned = structuredClone(prev);
+      const semantic = cloned.theme!.preset.semantic as Record<string, unknown>;
+      setObjectProperty(semantic, fullPath, value);
+      return cloned;
+    });
+  }
 
   protected isObject(val: unknown): boolean {
     return val !== null && typeof val === 'object' && !Array.isArray(val);

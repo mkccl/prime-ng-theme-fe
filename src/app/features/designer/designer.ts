@@ -37,7 +37,12 @@ export class Designer implements OnInit {
   ngOnInit(): void {
     const themeParam = this.route.snapshot.queryParamMap.get('theme');
     if (themeParam) {
-      this.designerService.importTheme(themeParam);
+      this.designerService
+        .importThemeFromUrl(themeParam)
+        .catch(() => false)
+        .then((ok) => {
+          if (!ok) this.designerService.importTheme(themeParam);
+        });
     }
   }
 
@@ -51,7 +56,7 @@ export class Designer implements OnInit {
   }
 
   protected async copyShareLink(): Promise<void> {
-    const token = this.designerService.encodeTheme();
+    const token = await this.designerService.compressThemeForUrl();
     if (!token) return;
     const url = `${window.location.origin}/designer?theme=${token}`;
     await navigator.clipboard.writeText(url);

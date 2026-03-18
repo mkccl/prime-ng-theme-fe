@@ -296,6 +296,60 @@ export default ${presetJson} as const;
     if (!theme) {
       return false;
     }
+    this.applyImportedTheme(theme);
+    return true;
+  }
+
+  async compressThemeForUrl(): Promise<string> {
+    const theme = this.designer().theme;
+    if (!theme) return '';
+    const payload = { name: theme.name, preset: theme.preset, config: theme.config };
+    const json = JSON.stringify(payload, (_key, value) =>
+      typeof value === 'function' ? undefined : (value as unknown),
+    );
+    const bytes = new TextEncoder().encode(json);
+    const cs = new CompressionStream('gzip');
+    const writer = cs.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    const compressed = await new Response(cs.readable).arrayBuffer();
+    const binary = Array.from(new Uint8Array(compressed), (b) => String.fromCharCode(b)).join('');
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  async importThemeFromUrl(compressed: string): Promise<boolean> {
+    const theme = await this.decompressThemeFromUrl(compressed);
+    if (!theme) return false;
+    this.applyImportedTheme(theme);
+    return true;
+  }
+
+  private async decompressThemeFromUrl(urlSafe: string): Promise<ThemeState | null> {
+    try {
+      const base64 = urlSafe.replace(/-/g, '+').replace(/_/g, '/');
+      const binary = atob(base64);
+      const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+      // Check gzip magic number (0x1F 0x8B) to avoid uncatchable DecompressionStream errors
+      if (bytes.length < 2 || bytes[0] !== 0x1f || bytes[1] !== 0x8b) return null;
+      const ds = new DecompressionStream('gzip');
+      const writer = ds.writable.getWriter();
+      writer.write(bytes);
+      writer.close();
+      const decompressed = await new Response(ds.readable).arrayBuffer();
+      const json = new TextDecoder().decode(decompressed);
+      const payload = JSON.parse(json) as Record<string, unknown>;
+      if (!payload['preset'] || typeof payload['preset'] !== 'object') return null;
+      return {
+        name: (payload['name'] as string) || 'Imported Theme',
+        preset: payload['preset'],
+        config: (payload['config'] as ThemeConfig) || { fontSize: '14px', fontFamily: 'Inter var' },
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  private applyImportedTheme(theme: ThemeState): void {
     this.designer.update((prev) => ({
       ...prev,
       theme,
@@ -306,7 +360,6 @@ export default ${presetJson} as const;
     usePreset(theme.preset);
     this.refreshACTokens();
     document.documentElement.style.fontSize = theme.config.fontSize;
-    return true;
   }
 
   private serializePreset(obj: unknown, indent = 2): string {

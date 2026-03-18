@@ -88,6 +88,8 @@ describe('Designer', () => {
     const newFixture = TestBed.createComponent(Designer);
     newFixture.detectChanges();
     await newFixture.whenStable();
+    // Wait for the async importThemeFromUrl → importTheme fallback chain
+    await new Promise((r) => setTimeout(r, 50));
 
     expect(newService.designer().activeView).toBe('editor');
     expect(newService.designer().theme!.name).toBe('URL Theme');

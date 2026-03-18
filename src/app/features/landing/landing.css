@@ -8,7 +8,7 @@
   font-family: var(--font-body);
   color: var(--p-text-color);
   background: var(--p-content-background);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ───────────────────── Ambient Blobs ───────────────────── */

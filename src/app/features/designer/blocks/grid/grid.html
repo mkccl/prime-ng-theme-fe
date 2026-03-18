@@ -1,0 +1,21 @@
+<div class="flex flex-col h-full overflow-hidden">
+  <nav class="flex items-center gap-2 p-4 shrink-0 flex-wrap">
+    @for (block of blocks(); track block.id) {
+      <p-button
+        [label]="block.label"
+        [icon]="block.icon"
+        [severity]="selectedBlockId() === block.id ? 'primary' : 'secondary'"
+        size="small"
+        (onClick)="selectBlock(block.id)"
+      />
+    }
+  </nav>
+
+  <div class="flex-1 p-4 pt-0 overflow-hidden grid place-items-center">
+    <div class="w-full max-w-7xl h-full border border-surface rounded-lg overflow-auto">
+      @if (selectedComponent) {
+        <ng-container *ngComponentOutlet="$any(selectedComponent)" />
+      }
+    </div>
+  </div>
+</div>

@@ -2,3 +2,5 @@
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
 @import 'highlight.js/styles/github.css';
+
+@custom-variant dark (.p-dark &);

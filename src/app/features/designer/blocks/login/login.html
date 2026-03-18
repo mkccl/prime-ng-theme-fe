@@ -1,0 +1,84 @@
+<!-- toast template -->
+<p-toast>
+  <ng-template #message let-message>
+    <div class="flex flex-col gap-1 flex-1">
+      <span class="font-semibold">{{ message.summary }}</span>
+      <span class="text-sm">{{ message.detail }}</span>
+    </div>
+  </ng-template>
+</p-toast>
+
+<div class="h-full w-full grid place-items-center">
+  <p-card
+    header="Sign in to your account"
+    subheader="Enter your email and password to access your account"
+    class="border! border-surface!"
+  >
+    <form [formGroup]="form" (ngSubmit)="onLogin()" class="flex flex-col gap-4 mt-4">
+      <!-- Fields -->
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+          <label for="login-email">Email</label>
+          <input
+            pInputText
+            id="login-email"
+            type="email"
+            placeholder="email@example.com"
+            class="w-full"
+            formControlName="email"
+          />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p-message severity="error" size="small" variant="simple"
+              >Please enter a valid email address.</p-message
+            >
+          }
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <div class="flex justify-between items-center">
+            <label for="login-password">Password</label>
+            <p-button
+              label="Forgot your password?"
+              link="true"
+              size="small"
+              type="button"
+              styleClass="p-0!"
+            />
+          </div>
+          <p-password
+            id="login-password"
+            formControlName="password"
+            [fluid]="true"
+            [toggleMask]="true"
+            [feedback]="false"
+            autocomplete="off"
+          />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <p-message severity="error" size="small" variant="simple"
+              >Password must be at least 6 characters.</p-message
+            >
+          }
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col gap-2">
+        <p-button label="Login" [fluid]="true" type="submit" />
+
+        <p-button
+          label="Sign in with Microsoft"
+          variant="outlined"
+          severity="secondary"
+          [fluid]="true"
+          type="button"
+          icon="pi pi-microsoft"
+        />
+
+        <div class="flex gap-2 justify-center items-center">
+          <p class="text-sm text-center text-muted-color">Don't have an account?</p>
+          <p-button label="Sign up" link="true" size="small" type="button" styleClass="p-0!" />
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>

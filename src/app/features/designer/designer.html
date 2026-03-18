@@ -18,6 +18,21 @@
       <h1 class="text-xl font-bold m-0">{{ themeName() }}</h1>
     </div>
     <div class="flex items-center gap-2">
+      @if (activeView() === 'editor') {
+        <button
+          (click)="copyShareLink()"
+          class="p-2 rounded-lg hover:bg-[var(--p-content-hover-background)]"
+          [pTooltip]="shareCopied() ? 'Copied!' : 'Copy share link'"
+          tooltipPosition="bottom"
+        >
+          <i
+            class="pi"
+            [class.pi-check]="shareCopied()"
+            [class.pi-link]="!shareCopied()"
+            [style.color]="shareCopied() ? 'var(--p-green-500)' : ''"
+          ></i>
+        </button>
+      }
       <button
         (click)="toggleDarkMode()"
         class="p-2 rounded-lg hover:bg-[var(--p-content-hover-background)]"

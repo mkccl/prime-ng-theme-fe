@@ -13,6 +13,9 @@
   </a>
   <div class="nav-right">
     <app-theme-switcher />
+    <a routerLink="/changelog" class="nav-link" title="Changelog">
+      <i class="pi pi-list"></i>
+    </a>
     <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener" class="nav-github" title="GitHub">
       <i class="pi pi-github"></i>
     </a>
@@ -123,6 +126,268 @@
         <p-chip label="PrimeNG" />
       </div>
     </div>
+
+    <!-- Messages -->
+    <div class="component-card fade-up" style="--delay: 0.4s">
+      <span class="component-card-label">Messages</span>
+      <div class="component-card-content" style="flex-direction: column; width: 100%">
+        <p-message severity="success" text="Operation completed" />
+        <p-message severity="info" text="Tip: try dark mode" />
+        <p-message severity="warn" text="Storage almost full" />
+        <p-message severity="error" text="Connection lost" />
+      </div>
+    </div>
+
+    <!-- Avatars -->
+    <div class="component-card fade-up" style="--delay: 0.45s">
+      <span class="component-card-label">Avatars</span>
+      <div class="component-card-content">
+        <p-avatar label="A" shape="circle" />
+        <p-avatar label="B" shape="circle" styleClass="p-avatar-info" />
+        <p-avatar-group>
+          <p-avatar label="C" shape="circle" />
+          <p-avatar label="D" shape="circle" />
+          <p-avatar label="E" shape="circle" />
+          <p-avatar label="+3" shape="circle" />
+        </p-avatar-group>
+      </div>
+    </div>
+
+    <!-- Slider -->
+    <div class="component-card fade-up" style="--delay: 0.5s">
+      <span class="component-card-label">Slider</span>
+      <div class="component-card-content" style="width: 100%">
+        <p-slider [(ngModel)]="previewSlider" style="width: 100%" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Block Previews -->
+<section class="blocks-section">
+  <div class="section-header fade-up" style="--delay: 0.1s">
+    <div class="section-tag">Block Templates</div>
+    <h2 class="section-title">Pre-built layouts, fully themed</h2>
+    <p class="section-subtitle">
+      Every block adapts to your design tokens in real time. Pick a starting point and make it yours.
+    </p>
+  </div>
+
+  <div class="blocks-grid">
+    <!-- Login Block -->
+    <div class="block-preview-card fade-up" style="--delay: 0.15s">
+      <div class="block-preview-card-header">
+        <i class="pi pi-sign-in"></i>
+        <div>
+          <h3>Login</h3>
+          <p>Authentication form with social sign-in</p>
+        </div>
+      </div>
+      <div class="block-preview-card-body">
+        <label class="block-label">Email</label>
+        <input pInputText placeholder="user@example.com" [(ngModel)]="loginEmail" class="w-full" />
+        <label class="block-label">Password</label>
+        <p-password
+          placeholder="Enter password"
+          [(ngModel)]="loginPassword"
+          [toggleMask]="true"
+          [feedback]="false"
+          [fluid]="true"
+          autocomplete="off"
+        />
+        <p-button label="Sign In" styleClass="w-full" />
+        <p-divider align="center">
+          <span class="block-divider-text">or</span>
+        </p-divider>
+        <p-button label="Continue with Google" icon="pi pi-google" [outlined]="true" styleClass="w-full" />
+      </div>
+      <div class="block-preview-card-footer">
+        <a routerLink="/designer" class="block-try-link">Try in Designer <i class="pi pi-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- Dashboard Block -->
+    <div class="block-preview-card fade-up" style="--delay: 0.2s">
+      <div class="block-preview-card-header">
+        <i class="pi pi-chart-bar"></i>
+        <div>
+          <h3>Dashboard</h3>
+          <p>KPI cards, charts, and data tables</p>
+        </div>
+      </div>
+      <div class="block-preview-card-body">
+        <div class="block-kpi-row">
+          <div class="block-kpi">
+            <span class="block-kpi-value">2,847</span>
+            <span class="block-kpi-label">Users</span>
+            <p-tag value="+12%" severity="success" [rounded]="true" />
+          </div>
+          <div class="block-kpi">
+            <span class="block-kpi-value">$12.4k</span>
+            <span class="block-kpi-label">Revenue</span>
+            <p-tag value="+8%" severity="success" [rounded]="true" />
+          </div>
+          <div class="block-kpi">
+            <span class="block-kpi-value">94.2%</span>
+            <span class="block-kpi-label">Uptime</span>
+            <p-tag value="-0.3%" severity="warn" [rounded]="true" />
+          </div>
+        </div>
+        <div class="block-progress-group">
+          <div class="block-progress-item">
+            <span class="block-progress-label">Conversion</span>
+            <span class="block-progress-value">75%</span>
+          </div>
+          <p-progress-bar [value]="75" [showValue]="false" style="height: 0.5rem" />
+          <div class="block-progress-item">
+            <span class="block-progress-label">Bounce Rate</span>
+            <span class="block-progress-value">32%</span>
+          </div>
+          <p-progress-bar [value]="32" [showValue]="false" style="height: 0.5rem" />
+          <div class="block-progress-item">
+            <span class="block-progress-label">Satisfaction</span>
+            <span class="block-progress-value">91%</span>
+          </div>
+          <p-progress-bar [value]="91" [showValue]="false" style="height: 0.5rem" />
+        </div>
+      </div>
+      <div class="block-preview-card-footer">
+        <a routerLink="/designer" class="block-try-link">Try in Designer <i class="pi pi-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- Table Block -->
+    <div class="block-preview-card fade-up" style="--delay: 0.25s">
+      <div class="block-preview-card-header">
+        <i class="pi pi-table"></i>
+        <div>
+          <h3>Data Table</h3>
+          <p>Sortable rows with header styling</p>
+        </div>
+      </div>
+      <div class="block-preview-card-body block-table-body">
+        <p-table [value]="tableData" [stripedRows]="true" [tableStyle]="{ 'min-width': '100%' }">
+          <ng-template #header>
+            <tr>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-row>
+            <tr>
+              <td>{{ row.name }}</td>
+              <td><p-tag [value]="row.status" [severity]="row.severity" /></td>
+              <td>{{ row.date }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="block-preview-card-footer">
+        <a routerLink="/designer" class="block-try-link">Try in Designer <i class="pi pi-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- Sign Up Block -->
+    <div class="block-preview-card fade-up" style="--delay: 0.3s">
+      <div class="block-preview-card-header">
+        <i class="pi pi-user-plus"></i>
+        <div>
+          <h3>Sign Up</h3>
+          <p>Split layout with branded panel</p>
+        </div>
+      </div>
+      <div class="block-preview-card-body">
+        <div class="block-signup-layout">
+          <div class="block-signup-form">
+            <label class="block-label">Full Name</label>
+            <input pInputText placeholder="John Doe" [(ngModel)]="signupName" class="w-full" />
+            <label class="block-label">Email</label>
+            <input pInputText placeholder="john@example.com" [(ngModel)]="signupEmail" class="w-full" />
+            <label class="block-label">Password</label>
+            <p-password
+              placeholder="Create password"
+              [(ngModel)]="signupPassword"
+              [toggleMask]="true"
+              [feedback]="false"
+              [fluid]="true"
+              autocomplete="off"
+            />
+            <p-button label="Create Account" styleClass="w-full" />
+          </div>
+          <div class="block-signup-gradient">
+            <i class="pi pi-prime"></i>
+            <span>Theme Studio</span>
+            <small>Design your perfect theme</small>
+          </div>
+        </div>
+      </div>
+      <div class="block-preview-card-footer">
+        <a routerLink="/designer" class="block-try-link">Try in Designer <i class="pi pi-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features-section">
+  <div class="section-header fade-up" style="--delay: 0.1s">
+    <div class="section-tag">Features</div>
+    <h2 class="section-title">Everything you need to craft themes</h2>
+    <p class="section-subtitle">
+      A complete toolkit for designing, previewing, and exporting PrimeNG themes.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card fade-up" style="--delay: 0.15s">
+      <div class="feature-card-icon"><i class="pi pi-eye"></i></div>
+      <h3 class="feature-card-title">Real-time Preview</h3>
+      <p class="feature-card-desc">See every change instantly on live components as you edit design tokens.</p>
+    </div>
+
+    <div class="feature-card fade-up" style="--delay: 0.2s">
+      <div class="feature-card-icon"><i class="pi pi-sliders-h"></i></div>
+      <h3 class="feature-card-title">Token Editing</h3>
+      <p class="feature-card-desc">Fine-tune primitive, semantic, and component-level tokens with full control.</p>
+    </div>
+
+    <div class="feature-card fade-up" style="--delay: 0.25s">
+      <div class="feature-card-icon"><i class="pi pi-palette"></i></div>
+      <h3 class="feature-card-title">Multiple Presets</h3>
+      <p class="feature-card-desc">Start from Aura, Material, Lara, or Nora and customize from there.</p>
+    </div>
+
+    <div class="feature-card fade-up" style="--delay: 0.3s">
+      <div class="feature-card-icon"><i class="pi pi-download"></i></div>
+      <h3 class="feature-card-title">Export Ready</h3>
+      <p class="feature-card-desc">Export your theme as a production-ready TypeScript preset, ready for any PrimeNG project.</p>
+    </div>
+
+    <div class="feature-card fade-up" style="--delay: 0.35s">
+      <div class="feature-card-icon"><i class="pi pi-moon"></i></div>
+      <h3 class="feature-card-title">Dark Mode</h3>
+      <p class="feature-card-desc">Design for both light and dark modes with automatic palette generation.</p>
+    </div>
+
+    <div class="feature-card fade-up" style="--delay: 0.4s">
+      <div class="feature-card-icon"><i class="pi pi-github"></i></div>
+      <h3 class="feature-card-title">Open Source</h3>
+      <p class="feature-card-desc">Free and open source. Inspect, contribute, or self-host.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-banner fade-up" style="--delay: 0.1s">
+    <h2 class="cta-heading">Ready to design your theme?</h2>
+    <p class="cta-subtext">
+      Jump into the designer and start customizing. Export when you're done — it's that simple.
+    </p>
+    <a routerLink="/designer">
+      <p-button label="Start Designing" icon="pi pi-arrow-right" iconPos="right" />
+    </a>
   </div>
 </section>
 

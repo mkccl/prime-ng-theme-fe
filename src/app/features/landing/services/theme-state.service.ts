@@ -74,12 +74,22 @@ export class ThemeStateService {
   private readonly _selectedPrimary = signal('emerald');
   private readonly _selectedSurface = signal('slate');
   private readonly _selectedPreset = signal('Aura');
-  private readonly _isDark = signal(false);
+  private readonly _isDark = signal(
+    typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
 
   readonly selectedPrimary = this._selectedPrimary.asReadonly();
   readonly selectedSurface = this._selectedSurface.asReadonly();
   readonly selectedPreset = this._selectedPreset.asReadonly();
   readonly isDark = this._isDark.asReadonly();
+
+  constructor() {
+    if (this._isDark()) {
+      document.documentElement.classList.add('p-dark');
+    }
+  }
 
   readonly primaryColors = PRIMARY_COLORS;
   readonly surfaceColors = SURFACE_COLORS;

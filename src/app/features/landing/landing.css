@@ -119,6 +119,7 @@
   gap: 1rem;
 }
 
+.nav-link,
 .nav-github {
   display: inline-flex;
   align-items: center;
@@ -131,10 +132,12 @@
   text-decoration: none;
 }
 
+.nav-link:hover,
 .nav-github:hover {
   color: var(--p-text-color);
 }
 
+.nav-link i,
 .nav-github i {
   font-size: 1.25rem;
 }
@@ -375,6 +378,212 @@
   gap: 0.625rem;
 }
 
+/* ───────────────────── Block Previews ───────────────────── */
+
+.blocks-section {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.blocks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.block-preview-card {
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.block-preview-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px -8px color-mix(in srgb, var(--p-primary-color), transparent 85%),
+    0 4px 12px -4px rgba(0, 0, 0, 0.08);
+}
+
+.block-preview-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--p-content-border-color);
+}
+
+.block-preview-card-header i {
+  font-size: 1.25rem;
+  color: var(--p-primary-color);
+}
+
+.block-preview-card-header h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--p-text-color);
+}
+
+.block-preview-card-header p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+.block-preview-card-body {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.block-preview-card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--p-content-border-color);
+}
+
+.block-try-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--p-primary-color);
+  text-decoration: none;
+  transition: gap 0.2s;
+}
+
+.block-try-link:hover {
+  gap: 0.625rem;
+}
+
+/* Block card inner layout */
+.block-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--p-text-muted-color);
+}
+
+.block-divider-text {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+.block-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.block-kpi {
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--p-primary-color), transparent 92%);
+  border: 1px solid color-mix(in srgb, var(--p-primary-color), transparent 82%);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.block-kpi-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--p-text-color);
+  line-height: 1;
+}
+
+.block-kpi-label {
+  font-size: 0.625rem;
+  color: var(--p-text-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+
+.block-progress-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.block-progress-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block-progress-label {
+  font-size: 0.75rem;
+  color: var(--p-text-color);
+}
+
+.block-progress-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--p-text-muted-color);
+}
+
+.block-table-body {
+  padding: 0;
+}
+
+.block-table-body .p-datatable {
+  font-size: 0.8125rem;
+}
+
+.block-signup-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  min-height: 14rem;
+}
+
+.block-signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.block-signup-gradient {
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--p-primary-color),
+    color-mix(in srgb, var(--p-primary-color), var(--p-surface-900) 40%)
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--p-primary-contrast-color);
+  padding: 1.5rem;
+}
+
+.block-signup-gradient i {
+  font-size: 2rem;
+}
+
+.block-signup-gradient span {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.block-signup-gradient small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
 /* ───────────────────── CTA Section ───────────────────── */
 
 .cta-section {
@@ -496,6 +705,10 @@
 
   .features-grid,
   .components-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blocks-grid {
     grid-template-columns: 1fr;
   }
 

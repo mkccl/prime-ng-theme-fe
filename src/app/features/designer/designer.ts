@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Splitter } from 'primeng/splitter';
+import { Tooltip } from 'primeng/tooltip';
 
 import { ThemeDesignerService } from './services/theme-designer.service';
 import { CreateTheme } from './components/create-theme';
@@ -18,7 +19,7 @@ import { Grid } from './blocks/grid/grid';
 @Component({
   selector: 'app-designer',
   standalone: true,
-  imports: [RouterLink, Splitter, CreateTheme, DesignEditor, EditorFooter, Grid],
+  imports: [RouterLink, Splitter, Tooltip, CreateTheme, DesignEditor, EditorFooter, Grid],
   templateUrl: './designer.html',
   styleUrl: './designer.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +32,7 @@ export class Designer implements OnInit {
     () => this.designerService.designer().theme?.name ?? 'Theme Designer',
   );
   protected readonly isDark = signal(false);
+  protected readonly shareCopied = signal(false);
 
   ngOnInit(): void {
     const themeParam = this.route.snapshot.queryParamMap.get('theme');
@@ -46,5 +48,14 @@ export class Designer implements OnInit {
 
   protected backToCreate(): void {
     this.designerService.openCreateTheme();
+  }
+
+  protected async copyShareLink(): Promise<void> {
+    const token = this.designerService.encodeTheme();
+    if (!token) return;
+    const url = `${window.location.origin}/designer?theme=${token}`;
+    await navigator.clipboard.writeText(url);
+    this.shareCopied.set(true);
+    setTimeout(() => this.shareCopied.set(false), 2000);
   }
 }

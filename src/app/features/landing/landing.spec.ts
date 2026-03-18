@@ -36,7 +36,7 @@ describe('Landing', () => {
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
     const cards = el.querySelectorAll('.component-card');
-    expect(cards.length).toBe(6);
+    expect(cards.length).toBe(9);
   });
 
   it('should render footer', async () => {

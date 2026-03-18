@@ -92,16 +92,22 @@ import { ThemeStateService } from '../services/theme-state.service';
     }
 
     .switcher-trigger {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       background: none;
       border: none;
-      color: var(--p-text-color);
+      color: var(--p-text-muted-color);
       cursor: pointer;
+      transition: color 0.15s;
+      font-size: 1.25rem;
     }
 
     .switcher-trigger:hover {
-      background: var(--p-content-hover-background);
+      color: var(--p-text-color);
     }
 
     .switcher-panel {

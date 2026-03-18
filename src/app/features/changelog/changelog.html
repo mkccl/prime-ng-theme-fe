@@ -1,0 +1,44 @@
+<div class="changelog-page">
+  <nav class="changelog-nav">
+    <a routerLink="/" class="changelog-back">
+      <i class="pi pi-arrow-left"></i>
+      <span>Back</span>
+    </a>
+  </nav>
+
+  <header class="changelog-header">
+    <h1 class="changelog-title">Changelog</h1>
+    <p class="changelog-subtitle">New features, improvements, and fixes.</p>
+  </header>
+
+  <div class="changelog-timeline">
+    @for (entry of entries; track entry.version) {
+      <article class="changelog-entry">
+        <div class="changelog-entry-header">
+          <span class="changelog-version">v{{ entry.version }}</span>
+          <span class="changelog-date">{{ entry.date }}</span>
+        </div>
+        <h2 class="changelog-entry-title">{{ entry.title }}</h2>
+        <ul class="changelog-changes">
+          @for (change of entry.changes; track change.text) {
+            <li class="changelog-change">
+              <span class="changelog-badge" [attr.data-type]="change.type">
+                {{ typeLabel(change.type) }}
+              </span>
+              <span>{{ change.text }}</span>
+            </li>
+          }
+        </ul>
+      </article>
+    }
+  </div>
+
+  <footer class="changelog-footer">
+    <span>made by ccl with</span>
+    <i class="pi pi-heart-fill"></i>
+    <span>open source on</span>
+    <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">
+      <i class="pi pi-github"></i> GitHub
+    </a>
+  </footer>
+</div>

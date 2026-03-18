@@ -2,7 +2,7 @@
 
 A visual theme designer for [PrimeNG](https://primeng.org) built with Angular 21. Customize every design token, preview changes in real time, and export production-ready themes — no manual CSS required.
 
-**Live:** [theme-designer.ccl.wtf](https://theme-designer.ccl.wtf)
+**Live:** [Demo](https://prime-ng-theme-fe.vercel.app/)
 
 ![Landing Page](docs/landing.png)
 

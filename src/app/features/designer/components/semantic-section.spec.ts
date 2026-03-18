@@ -89,4 +89,18 @@ describe('SemanticSection', () => {
     const heading = el.querySelector('.text-sm.font-semibold');
     expect(heading?.textContent?.trim()).toBe('Primary');
   });
+
+  it('should update designer service state when a token value changes', async () => {
+    const input = el.querySelector('design-token-field input') as HTMLInputElement;
+    expect(input).toBeTruthy();
+
+    input.value = '#ff0000';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const semantic = service.designer().theme?.preset?.semantic as Record<string, unknown>;
+    const primary = semantic['primary'] as Record<string, unknown>;
+    expect(primary['color']).toBe('#ff0000');
+  });
 });

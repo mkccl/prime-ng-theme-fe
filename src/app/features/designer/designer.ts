@@ -13,12 +13,12 @@ import { ThemeDesignerService } from './services/theme-designer.service';
 import { CreateTheme } from './components/create-theme';
 import { DesignEditor } from './components/editor';
 import { EditorFooter } from './components/editor-footer';
-import { DesignPreview } from './components/preview';
+import { Grid } from './blocks/grid/grid';
 
 @Component({
   selector: 'app-designer',
   standalone: true,
-  imports: [RouterLink, Splitter, CreateTheme, DesignEditor, EditorFooter, DesignPreview],
+  imports: [RouterLink, Splitter, CreateTheme, DesignEditor, EditorFooter, Grid],
   templateUrl: './designer.html',
   styleUrl: './designer.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

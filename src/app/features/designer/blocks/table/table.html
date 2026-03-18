@@ -1,0 +1,629 @@
+<div class="flex flex-col h-full overflow-hidden p-4 gap-4">
+  <p-confirmdialog styleClass="min-w-80!" />
+
+  <!-- ===== VIEW DIALOG ===== -->
+  <p-dialog
+    header="View Record"
+    [visible]="viewDialogVisible()"
+    (visibleChange)="viewDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    @if (selectedRecord(); as record) {
+      <div class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Code</label>
+          <input pInputText [value]="record.code" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Department</label>
+          <input pInputText [value]="record.department" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Category</label>
+          <input pInputText [value]="record.category" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Type</label>
+          <input pInputText [value]="record.type" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Status</label>
+          <input pInputText [value]="record.status" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Assignee</label>
+          <input pInputText [value]="record.assignee ?? '—'" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Quantity</label>
+          <input pInputText [value]="record.quantity" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Rating</label>
+          <input pInputText [value]="record.rating" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Value</label>
+          <input pInputText [value]="record.value" [disabled]="true" class="w-full" />
+        </div>
+      </div>
+    }
+    <ng-template #footer>
+      <p-button label="Close" severity="secondary" (onClick)="viewDialogVisible.set(false)" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== EDIT DIALOG ===== -->
+  <p-dialog
+    header="Update Record"
+    [visible]="editDialogVisible()"
+    (visibleChange)="editDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    <form [formGroup]="editForm" class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Code <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="code" class="w-full" />
+        @if (editForm.get('code')?.invalid && editForm.get('code')?.touched) {
+          <small class="text-red-500">Invalid format (e.g. REC-001)</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Department <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="department" class="w-full" />
+        @if (editForm.get('department')?.invalid && editForm.get('department')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Category <span class="text-red-500">*</span></label
+        >
+        <p-select
+          formControlName="category"
+          [options]="categoryOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select"
+          class="w-full"
+        />
+        @if (editForm.get('category')?.invalid && editForm.get('category')?.touched) {
+          <small class="text-red-500">Invalid category</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Type <span class="text-red-500">*</span></label
+        >
+        <p-select
+          formControlName="type"
+          [options]="typeOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select"
+          class="w-full"
+        />
+        @if (editForm.get('type')?.invalid && editForm.get('type')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Status <span class="text-red-500">*</span></label
+        >
+        <p-select
+          formControlName="status"
+          [options]="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select"
+          class="w-full"
+        />
+        @if (editForm.get('status')?.invalid && editForm.get('status')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Assignee</label>
+        <input pInputText formControlName="assignee" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Quantity <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber formControlName="quantity" [min]="0" [useGrouping]="false" class="w-full" />
+        @if (editForm.get('quantity')?.invalid && editForm.get('quantity')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('quantity')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Rating <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="rating"
+          [min]="0"
+          [minFractionDigits]="1"
+          [maxFractionDigits]="1"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (editForm.get('rating')?.invalid && editForm.get('rating')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('rating')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1 col-span-2">
+        <label class="text-sm font-medium text-color"
+          >Value <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="value"
+          [min]="0"
+          [maxFractionDigits]="2"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (editForm.get('value')?.invalid && editForm.get('value')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('value')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+    </form>
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        variant="outlined"
+        (onClick)="editDialogVisible.set(false)"
+      />
+      <p-button label="Update" [disabled]="editForm.invalid" (onClick)="saveEdit()" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== CREATE DIALOG ===== -->
+  <p-dialog
+    header="New Record"
+    [visible]="createDialogVisible()"
+    (visibleChange)="createDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    <form [formGroup]="createForm" class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Code <span class="text-red-500">*</span></label
+        >
+        <input
+          pInputText
+          formControlName="code"
+          placeholder="e.g. REC-011"
+          class="w-full"
+        />
+        @if (createForm.get('code')?.invalid && createForm.get('code')?.touched) {
+          <small class="text-red-500">Invalid format (e.g. REC-011)</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Department <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="department" class="w-full" />
+        @if (createForm.get('department')?.invalid && createForm.get('department')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Category <span class="text-red-500">*</span></label
+        >
+        <p-select
+          formControlName="category"
+          [options]="categoryOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select"
+          class="w-full"
+        />
+        @if (createForm.get('category')?.invalid && createForm.get('category')?.touched) {
+          <small class="text-red-500">Invalid category</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Type <span class="text-red-500">*</span></label
+        >
+        <p-select
+          formControlName="type"
+          [options]="typeOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select"
+          class="w-full"
+        />
+        @if (createForm.get('type')?.invalid && createForm.get('type')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Status <span class="text-red-500">*</span></label
+        >
+        <p-select
+          formControlName="status"
+          [options]="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select"
+          class="w-full"
+        />
+        @if (createForm.get('status')?.invalid && createForm.get('status')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Assignee</label>
+        <input pInputText formControlName="assignee" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Quantity <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="quantity"
+          [min]="0"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (createForm.get('quantity')?.invalid && createForm.get('quantity')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('quantity')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Rating <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="rating"
+          [min]="0"
+          [minFractionDigits]="1"
+          [maxFractionDigits]="1"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (createForm.get('rating')?.invalid && createForm.get('rating')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('rating')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1 col-span-2">
+        <label class="text-sm font-medium text-color"
+          >Value <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="value"
+          [min]="0"
+          [maxFractionDigits]="2"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (createForm.get('value')?.invalid && createForm.get('value')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('value')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+    </form>
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        variant="outlined"
+        (onClick)="createDialogVisible.set(false)"
+      />
+      <p-button label="Create" [disabled]="createForm.invalid" (onClick)="saveCreate()" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="flex items-center justify-between shrink-0">
+    <div>
+      <h1 class="text-lg font-semibold">Records</h1>
+      <p class="text-sm text-muted-color mt-0.5">Record Management System</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <!-- Selection badge -->
+      @if (selectedRecords.length > 0) {
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-primary-contrast text-sm font-medium"
+        >
+          <i class="pi pi-check-circle text-xs"></i>
+          {{ selectedRecords.length }} selected
+        </span>
+      }
+
+      <p-button
+        label="New Record"
+        icon="pi pi-plus"
+        size="small"
+        (onClick)="openCreateDialog()"
+      />
+    </div>
+  </div>
+
+  <!-- ===== TOOLBAR ===== -->
+  <div class="flex flex-wrap items-center gap-2 shrink-0">
+    <!-- Global filter -->
+    <p-iconfield class="flex-1 min-w-48">
+      <p-inputicon class="pi pi-search" />
+      <input
+        pInputText
+        placeholder="Global search..."
+        [value]="globalFilterValue()"
+        (input)="onGlobalFilter($event)"
+        class="w-full"
+        size="small"
+      />
+    </p-iconfield>
+
+    <!-- Refresh -->
+    <p-button
+      icon="pi pi-refresh"
+      severity="secondary"
+      variant="outlined"
+      size="small"
+      [loading]="loading()"
+      pTooltip="Refresh data"
+      tooltipPosition="top"
+      (onClick)="refresh()"
+    />
+
+    <!-- Table size -->
+    <p-select
+      [options]="sizeOptions"
+      [ngModel]="tableSize()"
+      (ngModelChange)="tableSize.set($event)"
+      optionLabel="label"
+      optionValue="value"
+      size="small"
+      pTooltip="Table size"
+      tooltipPosition="top"
+      styleClass="w-32"
+    />
+
+    <!-- Column toggle -->
+    <p-multiselect
+      [options]="cols"
+      [(ngModel)]="selectedColumns"
+      optionLabel="header"
+      placeholder="Columns"
+      selectedItemsLabel="{0} columns"
+      [maxSelectedLabels]="0"
+      size="small"
+      pTooltip="Select columns"
+      tooltipPosition="top"
+      (onChange)="sortSelectedColumns()"
+    />
+
+    <!-- Export CSV -->
+    <p-button
+      label="Export CSV"
+      icon="pi pi-download"
+      severity="secondary"
+      variant="outlined"
+      size="small"
+      pTooltip="Export to CSV"
+      tooltipPosition="top"
+      (onClick)="exportCsv()"
+    />
+  </div>
+
+  <!-- ===== TABLE ===== -->
+  <div
+    class="flex-1 border border-surface rounded-xl overflow-hidden bg-(--p-content-background) min-h-0"
+  >
+    <p-table
+      #dt
+      [value]="records()"
+      [(selection)]="selectedRecords"
+      selectionMode="multiple"
+      dataKey="code"
+      [size]="tableSize()"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 25]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+      [scrollable]="true"
+      scrollHeight="flex"
+      [tableStyle]="{ 'min-width': '80rem' }"
+      [globalFilterFields]="globalFilterFields"
+      [exportFilename]="'records'"
+      [stripedRows]="true"
+      [resizableColumns]="true"
+      columnResizeMode="expand"
+    >
+      <!-- Header -->
+      <ng-template #header>
+        <!-- Column headers row -->
+        <tr>
+          <th style="width: 3rem; min-width: 3rem" pFrozenColumn>
+            <p-tableHeaderCheckbox />
+          </th>
+          <th style="min-width: 8rem" pFrozenColumn pSortableColumn="code">
+            Code <p-sortIcon field="code" />
+          </th>
+          @for (col of selectedColumns; track col.field) {
+            @if (col.sortable) {
+              <th [style]="col.style" [pSortableColumn]="col.field">
+                {{ col.header }} <p-sortIcon [field]="col.field" />
+              </th>
+            } @else {
+              <th [style]="col.style">{{ col.header }}</th>
+            }
+          }
+          <th style="width: 8rem; min-width: 8rem">Actions</th>
+        </tr>
+
+        <!-- Column filters row -->
+        <tr>
+          <th pFrozenColumn></th>
+          <th pFrozenColumn>
+            <p-columnFilter field="code" type="text" [showMenu]="false" matchMode="contains">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <input
+                  pInputText
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  placeholder="Filter"
+                  class="w-full"
+                  style="font-size: 0.75rem"
+                />
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          @for (col of selectedColumns; track col.field) {
+            <th>
+              <p-columnFilter
+                [field]="col.field"
+                [type]="col.filterType ?? 'text'"
+                display="menu"
+                [showMatchModes]="true"
+                [showOperator]="false"
+              />
+            </th>
+          }
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <!-- Body -->
+      <ng-template #body let-record>
+        <tr>
+          <td pFrozenColumn>
+            <p-tableCheckbox [value]="record" />
+          </td>
+          <td pFrozenColumn class="font-medium">
+            {{ record.code }}
+          </td>
+          @for (col of selectedColumns; track col.field) {
+            <td>
+              @switch (col.field) {
+                @case ('status') {
+                  <p-tag
+                    [value]="record.status"
+                    [severity]="getStatusSeverity(record.status)"
+                    [icon]="getStatusIcon(record.status)"
+                  />
+                }
+                @case ('rating') {
+                  {{ record.rating | number: '1.1-1' }}
+                }
+                @case ('value') {
+                  {{ record.value | number: '1.0-2' }}
+                }
+                @case ('assignee') {
+                  {{ record.assignee ?? '—' }}
+                }
+                @default {
+                  {{ $any(record)[col.field] }}
+                }
+              }
+            </td>
+          }
+          <td>
+            <div class="flex gap-0.5">
+              <p-button
+                icon="pi pi-eye"
+                severity="secondary"
+                variant="text"
+                size="small"
+                [rounded]="true"
+                pTooltip="View"
+                tooltipPosition="top"
+                (onClick)="openViewDialog(record)"
+              />
+              <p-button
+                icon="pi pi-pencil"
+                severity="secondary"
+                variant="text"
+                size="small"
+                [rounded]="true"
+                pTooltip="Edit"
+                tooltipPosition="top"
+                (onClick)="openEditDialog(record)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                variant="text"
+                size="small"
+                [rounded]="true"
+                pTooltip="Delete"
+                tooltipPosition="top"
+                (onClick)="confirmDelete(record)"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty state -->
+      <ng-template #emptymessage>
+        <tr>
+          <td
+            [attr.colspan]="selectedColumns.length + 3"
+            class="text-center py-12 text-muted-color"
+          >
+            <div class="flex flex-col items-center gap-3">
+              <i class="pi pi-inbox text-4xl opacity-30"></i>
+              <span class="text-sm">No records found</span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

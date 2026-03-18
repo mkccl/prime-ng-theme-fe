@@ -1,0 +1,101 @@
+<div class="h-full w-full grid place-items-center p-4">
+  <div
+    class="w-full max-w-4xl border border-surface rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-130"
+  >
+    <!-- Left: Form -->
+    <div class="flex flex-col justify-center p-8 gap-6">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-2xl font-bold">Create your account</h1>
+        <p class="text-sm text-muted-color">Enter your email to create an account</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <!-- Email -->
+        <div class="flex flex-col gap-1">
+          <label for="signup-email" class="font-semibold text-sm">Email</label>
+          <input
+            pInputText
+            id="signup-email"
+            type="email"
+            placeholder="email@example.com"
+            class="w-full"
+            formControlName="email"
+          />
+          <p class="text-xs text-muted-color">
+            We'll use this to contact you. We won't share your email with anyone else.
+          </p>
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p-message severity="error" size="small" variant="simple">
+              Please enter a valid email address.
+            </p-message>
+          }
+        </div>
+
+        <!-- Password + Confirm Password -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="signup-password" class="font-semibold text-sm">Password</label>
+            <input
+              pInputText
+              id="signup-password"
+              type="password"
+              class="w-full"
+              formControlName="password"
+            />
+            @if (form.controls.password.invalid && form.controls.password.touched) {
+              <p-message severity="error" size="small" variant="simple">
+                Must be at least 8 characters.
+              </p-message>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="signup-confirm" class="font-semibold text-sm">Confirm Password</label>
+            <input
+              pInputText
+              id="signup-confirm"
+              type="password"
+              class="w-full"
+              formControlName="confirmPassword"
+            />
+            @if (form.controls.confirmPassword.touched && form.hasError('passwordMismatch')) {
+              <p-message severity="error" size="small" variant="simple">
+                Passwords do not match.
+              </p-message>
+            }
+          </div>
+        </div>
+
+        <p class="text-xs text-muted-color -mt-2">Must be at least 8 characters.</p>
+
+        <!-- Actions -->
+        <div class="flex flex-col gap-3">
+          <p-button label="Create Account" [fluid]="true" type="submit" />
+
+          <p-divider>
+            <span class="text-xs text-muted-color">Or continue with</span>
+          </p-divider>
+
+          <p-button
+            label="Continue with Microsoft"
+            variant="outlined"
+            severity="secondary"
+            [fluid]="true"
+            type="button"
+            icon="pi pi-microsoft"
+          />
+
+          <div class="flex gap-1 justify-center items-center">
+            <p class="text-sm text-muted-color">Already have an account?</p>
+            <p-button label="Sign in" link="true" size="small" type="button" styleClass="p-0!" />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right: Gradient Background -->
+    <div
+      class="hidden md:block bg-gradient-to-br from-primary/20 to-primary/60 dark:from-primary/10 dark:to-primary/40"
+    ></div>
+  </div>
+</div>

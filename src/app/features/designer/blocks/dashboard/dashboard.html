@@ -1,0 +1,791 @@
+<div
+  #dashboardContainer
+  class="flex h-full overflow-hidden text-sm relative"
+  style="transform: translateZ(0)"
+>
+  <!-- ===== DRAWER ===== -->
+  <p-drawer
+    [(visible)]="sidebarVisible"
+    position="left"
+    [appendTo]="dashboardContainer"
+    [modal]="false"
+    [style]="{ width: '20rem' }"
+  >
+    <ng-template #header>
+      <span class="font-bold text-lg">Theme Studio</span>
+    </ng-template>
+
+    <!-- Main navigation -->
+    <nav class="px-2 py-2 flex flex-col gap-0.5">
+      @for (item of navItems(); track item.label) {
+        <p-button
+          [label]="item.label"
+          size="small"
+          variant="text"
+          [severity]="item.active ? 'primary' : 'secondary'"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          [icon]="item.icon"
+        />
+      }
+
+      <div class="mt-4 mb-1 px-3">
+        <span class="text-xs font-medium text-muted-color uppercase tracking-wider"
+          >Management</span
+        >
+      </div>
+
+      @for (item of secondaryNavItems(); track item.label) {
+        <p-button
+          [label]="item.label"
+          size="small"
+          variant="text"
+          [severity]="item.active ? 'primary' : 'secondary'"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          [icon]="item.icon"
+        />
+      }
+    </nav>
+
+    <ng-template #footer>
+      <!-- Bottom settings -->
+      <div class="px-2 py-1 border-t border-surface flex flex-col gap-0.5">
+        <p-button
+          label="Settings"
+          size="small"
+          variant="text"
+          severity="secondary"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          icon="pi pi-cog text-xs"
+        />
+
+        <p-button
+          label="Help"
+          size="small"
+          variant="text"
+          severity="secondary"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          icon="pi pi-cog"
+        />
+
+        <p-button
+          label="Search"
+          size="small"
+          variant="text"
+          severity="secondary"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          icon="pi pi-search"
+        />
+      </div>
+
+      <!-- User footer -->
+      <div class="border-t border-surface px-4 py-3 flex items-center gap-2">
+        <p-avatar label="J" shape="circle" />
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-medium truncate">Jane Doe</div>
+          <div class="text-xs text-muted-color truncate">jane.doe&#64;example.com</div>
+        </div>
+        <p-button
+          icon="pi pi-sign-out"
+          severity="secondary"
+          variant="text"
+          [rounded]="true"
+          (click)="confirmLogout()"
+        />
+      </div>
+    </ng-template>
+  </p-drawer>
+
+  <p-confirmdialog styleClass="min-w-80!" />
+
+  <!-- ===== VIEW DIALOG ===== -->
+  <p-dialog
+    header="View Record"
+    [visible]="viewDialogVisible()"
+    (visibleChange)="viewDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    @if (selectedRecord(); as record) {
+      <div class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Code</label>
+          <input pInputText [value]="record.code" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Department</label>
+          <input pInputText [value]="record.department" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Category</label>
+          <input pInputText [value]="record.category" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Type</label>
+          <input pInputText [value]="record.type" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Status</label>
+          <input pInputText [value]="record.status" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Assignee</label>
+          <input pInputText [value]="record.assignee ?? '—'" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Quantity</label>
+          <input pInputText [value]="record.quantity" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Rating</label>
+          <input pInputText [value]="record.rating" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Value</label>
+          <input pInputText [value]="record.value" [disabled]="true" class="w-full" />
+        </div>
+      </div>
+    }
+    <ng-template #footer>
+      <p-button label="Close" severity="secondary" (onClick)="viewDialogVisible.set(false)" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== EDIT DIALOG ===== -->
+  <p-dialog
+    header="Update Record"
+    [visible]="editDialogVisible()"
+    (visibleChange)="editDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    <form [formGroup]="editForm" class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Code <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="code" class="w-full" />
+        @if (editForm.get('code')?.invalid && editForm.get('code')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Department <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="department" class="w-full" />
+        @if (editForm.get('department')?.invalid && editForm.get('department')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Category <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="category" class="w-full" />
+        @if (editForm.get('category')?.invalid && editForm.get('category')?.touched) {
+          <small class="text-red-500">Invalid category.</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Type <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="type" class="w-full" />
+        @if (editForm.get('type')?.invalid && editForm.get('type')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Status <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="status" class="w-full" />
+        @if (editForm.get('status')?.invalid && editForm.get('status')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Assignee</label>
+        <input pInputText formControlName="assignee" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Quantity <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber formControlName="quantity" [min]="0" [useGrouping]="false" class="w-full" />
+        @if (editForm.get('quantity')?.invalid && editForm.get('quantity')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('quantity')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Rating <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="rating"
+          [min]="0"
+          [minFractionDigits]="1"
+          [maxFractionDigits]="1"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (editForm.get('rating')?.invalid && editForm.get('rating')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('rating')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1 col-span-2">
+        <label class="text-sm font-medium text-color"
+          >Value <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="value"
+          [min]="0"
+          [maxFractionDigits]="2"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (editForm.get('value')?.invalid && editForm.get('value')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('value')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+    </form>
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        variant="outlined"
+        (onClick)="editDialogVisible.set(false)"
+      />
+      <p-button label="Update" [disabled]="editForm.invalid" (onClick)="saveEdit()" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== CREATE DIALOG ===== -->
+  <p-dialog
+    header="New Record"
+    [visible]="createDialogVisible()"
+    (visibleChange)="createDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    <form [formGroup]="createForm" class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Code <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="code" class="w-full" />
+        @if (createForm.get('code')?.invalid && createForm.get('code')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Department <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="department" class="w-full" />
+        @if (createForm.get('department')?.invalid && createForm.get('department')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Category <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="category" class="w-full" />
+        @if (createForm.get('category')?.invalid && createForm.get('category')?.touched) {
+          <small class="text-red-500">Invalid category.</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Type <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="type" class="w-full" />
+        @if (createForm.get('type')?.invalid && createForm.get('type')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Status <span class="text-red-500">*</span></label
+        >
+        <input pInputText formControlName="status" class="w-full" />
+        @if (createForm.get('status')?.invalid && createForm.get('status')?.touched) {
+          <small class="text-red-500">Required field</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Assignee</label>
+        <input pInputText formControlName="assignee" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Quantity <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="quantity"
+          [min]="0"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (createForm.get('quantity')?.invalid && createForm.get('quantity')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('quantity')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color"
+          >Rating <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="rating"
+          [min]="0"
+          [minFractionDigits]="1"
+          [maxFractionDigits]="1"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (createForm.get('rating')?.invalid && createForm.get('rating')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('rating')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1 col-span-2">
+        <label class="text-sm font-medium text-color"
+          >Value <span class="text-red-500">*</span></label
+        >
+        <p-inputnumber
+          formControlName="value"
+          [min]="0"
+          [maxFractionDigits]="2"
+          [useGrouping]="false"
+          class="w-full"
+        />
+        @if (createForm.get('value')?.invalid && createForm.get('value')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('value')?.hasError('required')) {
+              Required field
+            } @else {
+              Must be >= 0
+            }
+          </small>
+        }
+      </div>
+    </form>
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        variant="outlined"
+        (onClick)="createDialogVisible.set(false)"
+      />
+      <p-button label="Create" [disabled]="createForm.invalid" (onClick)="saveCreate()" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 shrink-0">
+      <div class="flex items-center gap-3">
+        <p-button
+          icon="pi pi-bars"
+          severity="secondary"
+          variant="text"
+          [rounded]="true"
+          (click)="sidebarVisible = !sidebarVisible"
+        />
+        <h1 class="text-base font-semibold">Record Management</h1>
+      </div>
+
+      <p-button icon="pi pi-moon" severity="secondary" variant="text" [rounded]="true" />
+    </header>
+
+    <!-- Scrollable content -->
+    <div class="flex-1 overflow-auto p-6 flex flex-col gap-5">
+      <!-- KPI CARDS -->
+      <div class="grid grid-cols-4 gap-4">
+        @for (card of kpiCards(); track card.label) {
+          <p-card class="border! border-surface!">
+            <ng-template #header>
+              <div class="flex items-start justify-between gap-2 px-4 pt-4">
+                <span class="text-sm text-muted-color font-medium">{{ card.label }}</span>
+
+                <p-tag [severity]="card.trend === 'up' ? 'success' : 'danger'">
+                  <i
+                    [class]="
+                      card.trend === 'up' ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-right'
+                    "
+                    style="font-size: 0.65rem"
+                  ></i>
+                  {{ card.change }}
+                </p-tag>
+              </div>
+            </ng-template>
+
+            <ng-template #content>
+              <div class="flex flex-col gap-2">
+                <div class="text-xl font-bold text-color">{{ card.value }}</div>
+
+                <span class="flex gap-2 items-center text-muted-color">
+                  <i
+                    [class]="
+                      card.trend === 'up' ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-right'
+                    "
+                    style="font-size: 0.65rem"
+                  ></i>
+                  {{ card.description }}
+                </span>
+              </div>
+            </ng-template>
+          </p-card>
+        }
+      </div>
+
+      <!-- CHART CARD -->
+      <p-card class="border! border-surface!">
+        <ng-template #content>
+          <div class="flex items-center justify-between px-5 pt-4 pb-12 flex-wrap gap-3">
+            <div>
+              <h2 class="font-semibold text-lg">Output Volume</h2>
+              <p class="text-xs text-muted-color mt-0.5">Cumulative total over the last 3 months</p>
+            </div>
+
+            <div class="flex gap-1.5 flex-wrap">
+              <p-button label="Last 3 months" size="small" />
+              <p-button
+                label="Last 30 days"
+                size="small"
+                severity="secondary"
+                variant="outlined"
+              />
+              <p-button
+                label="Last 7 days"
+                size="small"
+                severity="secondary"
+                variant="outlined"
+              />
+            </div>
+          </div>
+
+          @if (chartData()) {
+            <div class="px-4 pb-4" style="height: 190px">
+              <p-chart
+                type="line"
+                [data]="chartData()"
+                [options]="chartOptions()"
+                styleClass="h-full w-full"
+              />
+            </div>
+          }
+        </ng-template>
+      </p-card>
+
+      <!-- TABLE SECTION -->
+      <p-card class="border! border-surface!">
+        <p-tabs value="0">
+          <p-tablist class="bg-(--p-overlay-modal-background)!">
+            <p-tab value="0">Inventory</p-tab>
+            <p-tab value="1">Recent Activity</p-tab>
+            <p-tab value="2">Field Team</p-tab>
+            <p-tab value="3">Documents</p-tab>
+          </p-tablist>
+
+          <p-tabpanels class="bg-(--p-overlay-modal-background)!">
+            <p-tabpanel value="0">
+              <div
+                class="border border-surface rounded-lg overflow-hidden bg-(--p-content-background)"
+              >
+                <p-table
+                  [value]="records()"
+                  [(selection)]="selectedRecords"
+                  selectionMode="multiple"
+                  [paginator]="true"
+                  [rows]="10"
+                  [rowsPerPageOptions]="[5, 10, 25]"
+                  dataKey="code"
+                  class="p-datatable-sm"
+                  [scrollable]="true"
+                  scrollHeight="400px"
+                  [tableStyle]="{ 'min-width': '62rem' }"
+                  [stripedRows]="true"
+                  [showCurrentPageReport]="true"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+                >
+                  <ng-template #caption>
+                    <div class="flex items-center justify-between px-1 py-1">
+                      <p-button
+                        label="New Record"
+                        icon="pi pi-plus"
+                        size="small"
+                        (onClick)="openCreateDialog()"
+                      />
+                      <p-multiselect
+                        [options]="cols"
+                        [(ngModel)]="selectedColumns"
+                        optionLabel="header"
+                        placeholder="Columns"
+                        selectedItemsLabel="{0} columns selected"
+                        [maxSelectedLabels]="2"
+                        size="small"
+                        (onChange)="sortSelectedColumns()"
+                      />
+                    </div>
+                  </ng-template>
+
+                  <ng-template #header>
+                    <tr>
+                      <th style="width: 3rem; min-width: 3rem">
+                        <p-tableHeaderCheckbox />
+                      </th>
+                      @for (col of selectedColumns; track col.field) {
+                        @if (col.sortable) {
+                          <th [style]="col.style" [pSortableColumn]="col.field">
+                            {{ col.header }} <p-sortIcon [field]="col.field" />
+                          </th>
+                        } @else {
+                          <th [style]="col.style">{{ col.header }}</th>
+                        }
+                      }
+                      <th style="width: 9rem; min-width: 9rem"></th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template #body let-record>
+                    <tr>
+                      <td>
+                        <p-tableCheckbox [value]="record" />
+                      </td>
+                      @for (col of selectedColumns; track col.field) {
+                        <td>
+                          @switch (col.field) {
+                            @case ('status') {
+                              <p-tag
+                                [value]="record.status"
+                                [severity]="getStatusSeverity(record.status)"
+                                [icon]="getStatusIcon(record.status)"
+                              />
+                            }
+                            @case ('rating') {
+                              {{ record.rating | number: '1.1-1' }}
+                            }
+                            @case ('assignee') {
+                              {{ record.assignee ?? '—' }}
+                            }
+                            @default {
+                              {{ $any(record)[col.field] }}
+                            }
+                          }
+                        </td>
+                      }
+                      <td>
+                        <div class="flex gap-0.5">
+                          <p-button
+                            icon="pi pi-eye"
+                            severity="secondary"
+                            variant="text"
+                            size="small"
+                            [rounded]="true"
+                            pTooltip="View"
+                            tooltipPosition="top"
+                            (onClick)="openViewDialog(record)"
+                          />
+                          <p-button
+                            icon="pi pi-pencil"
+                            severity="secondary"
+                            variant="text"
+                            size="small"
+                            [rounded]="true"
+                            pTooltip="Edit"
+                            tooltipPosition="top"
+                            (onClick)="openEditDialog(record)"
+                          />
+                          <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            variant="text"
+                            size="small"
+                            [rounded]="true"
+                            pTooltip="Delete"
+                            tooltipPosition="top"
+                            (onClick)="confirmDelete(record)"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="1">
+              <!-- Search + Actions -->
+              <div class="flex gap-2 items-center mb-4">
+                <p-iconfield class="flex-1">
+                  <p-inputicon class="pi pi-search" />
+                  <input
+                    pInputText
+                    placeholder="Search activity..."
+                    [(ngModel)]="activitySearch"
+                    class="w-full"
+                  />
+                </p-iconfield>
+                <p-button label="Filter" icon="pi pi-filter" severity="secondary" />
+                <p-button
+                  label="Sort"
+                  icon="pi pi-sort-alt"
+                  iconPos="right"
+                  severity="secondary"
+                />
+              </div>
+
+              <!-- Grouped list -->
+              @for (group of activityGroups(); track group.department) {
+                <div class="mb-5">
+                  <!-- Group header -->
+                  <div class="flex items-center gap-2 mb-2 px-1">
+                    <i class="pi pi-map-marker text-muted-color text-xs"></i>
+                    <span class="text-sm font-semibold text-color">{{ group.department }}</span>
+                  </div>
+
+                  <!-- Items -->
+                  <div class="border border-surface rounded-xl overflow-hidden">
+                    @for (item of group.items; track item.id; let last = $last) {
+                      <div
+                        class="flex items-center gap-3 px-4 py-3 bg-(--p-content-background) transition-colors"
+                        [class.border-b]="!last"
+                        [class.border-surface]="!last"
+                      >
+                        <!-- Icon box -->
+                        <div
+                          class="w-10 h-10 rounded-lg bg-surface-100 flex items-center justify-center shrink-0"
+                        >
+                          <i
+                            [class]="item.icon"
+                            [style.color]="item.iconColor"
+                            style="font-size: 1rem"
+                          ></i>
+                        </div>
+
+                        <!-- Main info -->
+                        <div class="flex-1 min-w-0">
+                          <div class="font-medium text-sm text-color">{{ item.code }}</div>
+                          <div class="text-xs text-muted-color mt-0.5 truncate">
+                            {{ item.category }} · {{ item.type }}
+                          </div>
+                        </div>
+
+                        <!-- Status + time -->
+                        <div class="text-right shrink-0">
+                          <div
+                            class="text-sm font-semibold"
+                            [class]="getActivityStatusClass(item.status)"
+                          >
+                            {{ item.status }}
+                          </div>
+                          <div class="text-xs text-muted-color mt-0.5">{{ item.time }}</div>
+                        </div>
+
+                        <!-- Menu button -->
+                        <p-button
+                          icon="pi pi-ellipsis-v"
+                          severity="secondary"
+                          variant="text"
+                          size="small"
+                          [rounded]="true"
+                        />
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </p-tabpanel>
+
+            <p-tabpanel value="2">
+              <p class="m-0">
+                The standard Lorem Ipsum passage, used since the 1500s, is reproduced below for
+                those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum"
+                by Cicero are also reproduced in their exact original form, accompanied by English
+                versions from the 1914 translation by H. Rackham.
+              </p>
+            </p-tabpanel>
+
+            <p-tabpanel value="3">
+              <!-- Recently Updated Documents -->
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-semibold text-base">Recently Updated</span>
+                <p-button
+                  icon="pi pi-refresh"
+                  variant="text"
+                  severity="secondary"
+                  [rounded]="true"
+                  size="small"
+                />
+              </div>
+
+              <div class="grid grid-cols-5 gap-4">
+                @for (doc of recentDocuments(); track doc.name) {
+                  <div class="flex flex-col items-center gap-2 cursor-pointer group">
+                    <div
+                      class="w-16 h-16 flex items-center justify-center rounded-2xl bg-surface-100 dark:bg-surface-800 group-hover:bg-surface-200 dark:group-hover:bg-surface-700 transition-colors"
+                    >
+                      <img [src]="doc.icon" [alt]="doc.ext" class="w-10 h-10 object-contain" />
+                    </div>
+                    <div class="flex flex-col items-center gap-0.5 w-full">
+                      <span
+                        class="text-xs font-medium leading-tight truncate w-full text-center"
+                        >{{ doc.name }}</span
+                      >
+                      <span class="text-xs text-muted-color">{{ doc.size }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </p-tabpanel>
+          </p-tabpanels>
+        </p-tabs>
+      </p-card>
+    </div>
+  </main>
+</div>

@@ -9,10 +9,4 @@ export const routes: Routes = [
     path: 'designer',
     loadChildren: () => import('./features/designer/designer.routes').then((m) => m.designerRoutes),
   },
-  // TODO: re-enable when blocks feature is ready
-  // {
-  //   path: 'blocks',
-  //   loadChildren: () =>
-  //     import('./features/blocks/blocks.routes').then((m) => m.blocksRoutes),
-  // },
 ];

@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
@@ -8,7 +8,6 @@ import { HelpDialog, HELP_CONTENT } from './help-dialog';
 @Component({
   standalone: true,
   imports: [HelpDialog],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<design-help-dialog [(helpVisible)]="visible" />`,
 })
 class TestHost {

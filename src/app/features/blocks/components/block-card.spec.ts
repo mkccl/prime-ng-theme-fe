@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 
@@ -9,7 +9,6 @@ import { BlockDefinition } from '../models/block-definition';
 @Component({
   selector: 'app-test-preview',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<div class="test-preview">Preview</div>`,
 })
 class TestPreview {}

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { ComponentSection } from './component-section';
 import { ThemeDesignerService } from '../services/theme-designer.service';
@@ -7,7 +7,6 @@ import { ThemeDesignerService } from '../services/theme-designer.service';
 @Component({
   standalone: true,
   imports: [ComponentSection],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <design-component-section [componentKey]="componentKey()" [path]="path()" /> `,
 })
 class TestHost {

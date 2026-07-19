@@ -21,37 +21,37 @@
     ]
   },
   "engines": {
-    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   },
   "private": true,
   "packageManager": "npm@11.16.0",
   "dependencies": {
-    "@angular/cdk": "^22.0.5",
-    "@angular/common": "^22.0.7",
-    "@angular/compiler": "^22.0.7",
-    "@angular/core": "^22.0.7",
-    "@angular/forms": "^22.0.7",
-    "@angular/platform-browser": "^22.0.7",
-    "@angular/router": "^22.0.7",
-    "@primeuix/themes": "^3.0.0",
+    "@angular/cdk": "^21.2.14",
+    "@angular/common": "^21.2.18",
+    "@angular/compiler": "^21.2.18",
+    "@angular/core": "^21.2.18",
+    "@angular/forms": "^21.2.18",
+    "@angular/platform-browser": "^21.2.18",
+    "@angular/router": "^21.2.18",
+    "@primeuix/themes": "^2.0.3",
     "@vercel/analytics": "^2.0.1",
     "chart.js": "^4.5.1",
     "highlight.js": "^11.11.1",
-    "primeicons": "^8.0.0",
-    "primeng": "^22.0.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^21.1.9",
     "rxjs": "^7.8.2",
     "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@angular/build": "^22.0.7",
-    "@angular/cli": "^22.0.7",
-    "@angular/compiler-cli": "^22.0.7",
+    "@angular/build": "^21.2.19",
+    "@angular/cli": "^21.2.19",
+    "@angular/compiler-cli": "^21.2.18",
     "@tailwindcss/postcss": "^4.3.3",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.20",
     "tailwindcss": "^4.3.3",
-    "typescript": "~6.0.3",
+    "typescript": "~5.9.3",
     "vitest": "^4.1.10"
   }
 }

@@ -490,15 +490,15 @@
         <!-- Column headers row -->
         <tr>
           <th style="width: 3rem; min-width: 3rem" pFrozenColumn>
-            <p-table-header-checkbox />
+            <p-tableHeaderCheckbox />
           </th>
           <th style="min-width: 8rem" pFrozenColumn pSortableColumn="code">
-            Code <p-sort-icon field="code" />
+            Code <p-sortIcon field="code" />
           </th>
           @for (col of selectedColumns; track col.field) {
             @if (col.sortable) {
               <th [style]="col.style" [pSortableColumn]="col.field">
-                {{ col.header }} <p-sort-icon [field]="col.field" />
+                {{ col.header }} <p-sortIcon [field]="col.field" />
               </th>
             } @else {
               <th [style]="col.style">{{ col.header }}</th>
@@ -511,7 +511,7 @@
         <tr>
           <th pFrozenColumn></th>
           <th pFrozenColumn>
-            <p-column-filter field="code" type="text" [showMenu]="false" matchMode="contains">
+            <p-columnFilter field="code" type="text" [showMenu]="false" matchMode="contains">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <input
                   pInputText
@@ -522,11 +522,11 @@
                   style="font-size: 0.75rem"
                 />
               </ng-template>
-            </p-column-filter>
+            </p-columnFilter>
           </th>
           @for (col of selectedColumns; track col.field) {
             <th>
-              <p-column-filter
+              <p-columnFilter
                 [field]="col.field"
                 [type]="col.filterType ?? 'text'"
                 display="menu"
@@ -543,7 +543,7 @@
       <ng-template #body let-record>
         <tr>
           <td pFrozenColumn>
-            <p-table-checkbox [value]="record" />
+            <p-tableCheckbox [value]="record" />
           </td>
           <td pFrozenColumn class="font-medium">
             {{ record.code }}

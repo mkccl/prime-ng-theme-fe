@@ -18,14 +18,7 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 
-import {
-  ColumnFilter,
-  SortIcon,
-  Table,
-  TableCheckbox,
-  TableHeaderCheckbox,
-  TableModule,
-} from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { MultiSelect } from 'primeng/multiselect';
@@ -93,10 +86,6 @@ const SEED_DATA: Record[] = [
     FormsModule,
     ReactiveFormsModule,
     TableModule,
-    TableHeaderCheckbox,
-    TableCheckbox,
-    SortIcon,
-    ColumnFilter,
     Button,
     Tag,
     MultiSelect,

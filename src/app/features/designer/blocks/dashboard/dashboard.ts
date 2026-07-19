@@ -11,7 +11,7 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 
-import { SortIcon, TableCheckbox, TableHeaderCheckbox, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { TabsModule } from 'primeng/tabs';
@@ -93,9 +93,6 @@ interface RecentDocument {
     FormsModule,
     ReactiveFormsModule,
     TableModule,
-    TableHeaderCheckbox,
-    TableCheckbox,
-    SortIcon,
     Button,
     Tag,
     TabsModule,

@@ -9,14 +9,13 @@ export const CHANGELOG: ChangelogEntry[] = [
   {
     version: '1.4.0',
     date: '2026-07-19',
-    title: 'Interactive Landing Page & Angular 22',
+    title: 'Interactive Landing Page & Dependency Refresh',
     changes: [
       { type: 'added', text: 'Interactive hero preview with live primary color controls and theme statistics' },
       { type: 'added', text: 'How It Works walkthrough and expanded landing page presentation' },
-      { type: 'changed', text: 'Upgraded Angular, Angular CLI, and Angular build tooling to version 22' },
-      { type: 'changed', text: 'Upgraded PrimeNG to 22, PrimeUIX themes to 3, PrimeIcons to 8, and supporting packages' },
+      { type: 'changed', text: 'Updated Angular and Angular tooling to the latest version 21 releases' },
       { type: 'changed', text: 'Updated Tailwind CSS, Vitest, jsdom, TypeScript, RxJS, and npm tooling' },
-      { type: 'fixed', text: 'Updated table components and selectors for PrimeNG 22 compatibility' },
+      { type: 'fixed', text: 'Kept PrimeNG on the latest open-source release to avoid license failures' },
     ],
   },
   {

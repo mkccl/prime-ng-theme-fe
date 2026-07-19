@@ -577,12 +577,12 @@
                   <ng-template #header>
                     <tr>
                       <th style="width: 3rem; min-width: 3rem">
-                        <p-table-header-checkbox />
+                        <p-tableHeaderCheckbox />
                       </th>
                       @for (col of selectedColumns; track col.field) {
                         @if (col.sortable) {
                           <th [style]="col.style" [pSortableColumn]="col.field">
-                            {{ col.header }} <p-sort-icon [field]="col.field" />
+                            {{ col.header }} <p-sortIcon [field]="col.field" />
                           </th>
                         } @else {
                           <th [style]="col.style">{{ col.header }}</th>
@@ -595,7 +595,7 @@
                   <ng-template #body let-record>
                     <tr>
                       <td>
-                        <p-table-checkbox [value]="record" />
+                        <p-tableCheckbox [value]="record" />
                       </td>
                       @for (col of selectedColumns; track col.field) {
                         <td>

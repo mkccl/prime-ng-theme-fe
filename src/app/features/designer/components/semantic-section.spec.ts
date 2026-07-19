@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { SemanticSection } from './semantic-section';
 import { ThemeDesignerService } from '../services/theme-designer.service';
@@ -7,7 +7,6 @@ import { ThemeDesignerService } from '../services/theme-designer.service';
 @Component({
   standalone: true,
   imports: [SemanticSection],
-  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<design-semantic-section [path]="path()" [root]="root()" />`,
 })
 class TestHost {

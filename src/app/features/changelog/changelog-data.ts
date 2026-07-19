@@ -16,6 +16,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       { type: 'changed', text: 'Updated Angular and Angular tooling to the latest version 21 releases' },
       { type: 'changed', text: 'Updated Tailwind CSS, Vitest, jsdom, TypeScript, RxJS, and npm tooling' },
       { type: 'fixed', text: 'Kept PrimeNG on the latest open-source release to avoid license failures' },
+      { type: 'fixed', text: 'Added a preset-aware radius selector so standard buttons and form fields can use any primitive corner radius' },
     ],
   },
   {

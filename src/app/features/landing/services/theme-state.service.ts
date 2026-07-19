@@ -1,11 +1,14 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import Aura from '@primeuix/themes/aura';
-import Lara from '@primeuix/themes/lara';
-import Material from '@primeuix/themes/material';
-import Nora from '@primeuix/themes/nora';
 import { updatePrimaryPalette, updateSurfacePalette, usePreset } from '@primeuix/themes';
 import { PrimeNG } from 'primeng/config';
+
+import {
+  DEFAULT_THEME_PRESET,
+  THEME_PRESET_OPTIONS,
+  THEME_PRESETS,
+  ThemePresetName,
+} from '../../../theme-presets';
 
 export interface ColorOption {
   name: string;
@@ -47,10 +50,6 @@ export const SURFACE_COLORS: ColorOption[] = [
   { name: 'stone', color: '#78716c' },
 ];
 
-export const PRESET_OPTIONS = ['Aura', 'Material', 'Lara', 'Nora'] as const;
-
-const presets: Record<string, any> = { Aura, Material, Lara, Nora };
-
 function paletteRef(name: string): Record<string, string> {
   return {
     50: `{${name}.50}`,
@@ -73,7 +72,7 @@ export class ThemeStateService {
 
   private readonly _selectedPrimary = signal('emerald');
   private readonly _selectedSurface = signal('slate');
-  private readonly _selectedPreset = signal('Aura');
+  private readonly _selectedPreset = signal<ThemePresetName>(DEFAULT_THEME_PRESET);
   private readonly _isDark = signal(
     typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -85,15 +84,14 @@ export class ThemeStateService {
   readonly selectedPreset = this._selectedPreset.asReadonly();
   readonly isDark = this._isDark.asReadonly();
 
-  constructor() {
-    if (this._isDark()) {
-      document.documentElement.classList.add('p-dark');
-    }
-  }
-
   readonly primaryColors = PRIMARY_COLORS;
   readonly surfaceColors = SURFACE_COLORS;
-  readonly presetOptions = PRESET_OPTIONS;
+  readonly presetOptions = THEME_PRESET_OPTIONS;
+
+  constructor() {
+    document.documentElement.classList.toggle('p-dark', this._isDark());
+    this.storeState();
+  }
 
   setPrimary(name: string): void {
     this._selectedPrimary.set(name);
@@ -108,13 +106,15 @@ export class ThemeStateService {
   }
 
   setPreset(name: string): void {
+    if (!this.isPresetName(name)) return;
+
     this._selectedPreset.set(name);
-    usePreset(presets[name]);
+    usePreset(THEME_PRESETS[name]);
     this.broadcast();
   }
 
   toggleDark(): void {
-    this._isDark.update((v) => !v);
+    this._isDark.update((value) => !value);
     document.documentElement.classList.toggle('p-dark', this._isDark());
     this.broadcast();
   }
@@ -137,8 +137,17 @@ export class ThemeStateService {
   }
 
   private broadcast(): void {
-    const state = this.getThemeState();
-    (document as any).__themeState = state;
+    const state = this.storeState();
     document.dispatchEvent(new CustomEvent<ThemeState>('theme-switcher-change', { detail: state }));
+  }
+
+  private storeState(): ThemeState {
+    const state = this.getThemeState();
+    (document as Document & { __themeState?: ThemeState }).__themeState = state;
+    return state;
+  }
+
+  private isPresetName(name: string): name is ThemePresetName {
+    return THEME_PRESET_OPTIONS.includes(name as ThemePresetName);
   }
 }

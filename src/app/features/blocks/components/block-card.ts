@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { DEFAULT_THEME_PRESET } from '../../../theme-presets';
 import { type ThemeState } from '../../landing/services/theme-state.service';
 import { BlockDefinition } from '../models/block-definition';
 import { CodeDialog } from './code-dialog';
@@ -98,7 +99,7 @@ export class BlockCard {
       const state: ThemeState = stored ?? {
         primary: 'emerald',
         surface: 'slate',
-        preset: 'Aura',
+        preset: DEFAULT_THEME_PRESET,
         isDark: document.documentElement.classList.contains('p-dark'),
       };
       iframe.contentWindow.postMessage({ type: 'theme-change', ...state }, '*');

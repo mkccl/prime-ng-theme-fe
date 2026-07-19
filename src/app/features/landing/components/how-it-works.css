@@ -1,0 +1,199 @@
+:host {
+  display: block;
+  font-family: var(--font-body);
+}
+
+.workflow {
+  width: min(100%, 78rem);
+  margin-inline: auto;
+  padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 4vw, 3rem);
+  border-block: 1px solid var(--p-content-border-color);
+  scroll-margin-top: 6rem;
+}
+
+.workflow-heading {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: end;
+  gap: clamp(2rem, 7vw, 7rem);
+  margin-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+
+.workflow-kicker,
+.step-detail,
+.step-number {
+  font-family: var(--font-mono);
+}
+
+.workflow-kicker {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--p-primary-color);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.workflow-heading h2 {
+  max-width: 15ch;
+  margin: 0;
+  color: var(--p-text-color);
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 4.5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.workflow-heading p {
+  max-width: 31rem;
+  margin: 0;
+  color: var(--p-text-muted-color);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.workflow-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--p-content-border-color);
+}
+
+.how-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4rem 3.25rem minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--p-content-border-color);
+}
+
+.step-number {
+  padding-top: 0.65rem;
+  color: var(--p-text-muted-color);
+  font-size: 0.68rem;
+}
+
+.step-icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.9rem;
+  color: var(--p-primary-color);
+  background: color-mix(in srgb, var(--p-primary-color), transparent 90%);
+  font-size: 1rem;
+}
+
+.step-copy {
+  max-width: 43rem;
+}
+
+.step-detail {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--p-primary-color);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.step-copy h3 {
+  margin: 0 0 0.55rem;
+  color: var(--p-text-color);
+  font-size: 1.12rem;
+}
+
+.step-copy p {
+  margin: 0;
+  color: var(--p-text-muted-color);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.step-line {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  width: 0;
+  height: 100%;
+  border-inline-end: 2px solid transparent;
+  transition: border-color 180ms ease;
+}
+
+.how-step:hover .step-line {
+  border-color: var(--p-primary-color);
+}
+
+.workflow-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.workflow-action a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--p-primary-color);
+  font-size: 0.86rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition: gap 160ms ease;
+}
+
+.workflow-action a:hover {
+  gap: 0.65rem;
+}
+
+.workflow-action span {
+  color: var(--p-text-muted-color);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 768px) {
+  .workflow-heading {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1.25rem;
+  }
+
+  .how-step {
+    grid-template-columns: 2.5rem 3rem minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  .step-icon {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .how-step {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+  }
+
+  .step-icon {
+    display: none;
+  }
+
+  .workflow-action {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-line,
+  .workflow-action a {
+    transition: none;
+  }
+}

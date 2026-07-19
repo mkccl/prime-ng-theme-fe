@@ -1,0 +1,93 @@
+<button
+  type="button"
+  class="switcher-trigger"
+  aria-label="Open theme settings"
+  (click)="op.toggle($event)"
+>
+  <i class="pi pi-cog" aria-hidden="true"></i>
+</button>
+
+<p-popover #op appendTo="body">
+  <div class="switcher-panel" aria-label="Theme settings">
+    <fieldset>
+      <legend class="switcher-label">Primary</legend>
+      <div class="switcher-grid" role="group" aria-label="Primary color">
+        @for (color of themeState.primaryColors; track color.name) {
+          <button
+            type="button"
+            class="switcher-swatch"
+            [class.switcher-swatch-selected]="themeState.selectedPrimary() === color.name"
+            [style.backgroundColor]="color.color"
+            [attr.aria-label]="'Use ' + color.name + ' as the primary color'"
+            [attr.aria-pressed]="themeState.selectedPrimary() === color.name"
+            (click)="themeState.setPrimary(color.name)"
+          ></button>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend class="switcher-label">Surface</legend>
+      <div class="switcher-row" role="group" aria-label="Surface color">
+        @for (color of themeState.surfaceColors; track color.name) {
+          <button
+            type="button"
+            class="switcher-swatch"
+            [class.switcher-swatch-selected]="themeState.selectedSurface() === color.name"
+            [style.backgroundColor]="color.color"
+            [attr.aria-label]="'Use ' + color.name + ' as the surface color'"
+            [attr.aria-pressed]="themeState.selectedSurface() === color.name"
+            (click)="themeState.setSurface(color.name)"
+          ></button>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend class="switcher-label">Preset</legend>
+      <div class="switcher-presets" role="group" aria-label="Theme preset">
+        @for (preset of themeState.presetOptions; track preset) {
+          <button
+            type="button"
+            class="switcher-preset-btn"
+            [class.switcher-preset-active]="themeState.selectedPreset() === preset"
+            [attr.aria-pressed]="themeState.selectedPreset() === preset"
+            (click)="themeState.setPreset(preset)"
+          >
+            {{ preset }}
+          </button>
+        }
+      </div>
+    </fieldset>
+
+    <div class="switcher-toggles">
+      <div class="switcher-toggle-row">
+        <label for="switcher-dark-mode">Dark mode</label>
+        <p-toggleswitch
+          inputId="switcher-dark-mode"
+          [ngModel]="themeState.isDark()"
+          (ngModelChange)="themeState.toggleDark()"
+          ariaLabel="Toggle dark mode"
+        />
+      </div>
+      <div class="switcher-toggle-row">
+        <label for="switcher-ripple">Ripple</label>
+        <p-toggleswitch
+          inputId="switcher-ripple"
+          [(ngModel)]="ripple"
+          (ngModelChange)="themeState.toggleRipple(ripple())"
+          ariaLabel="Toggle ripple effects"
+        />
+      </div>
+      <div class="switcher-toggle-row">
+        <label for="switcher-rtl">Right to left</label>
+        <p-toggleswitch
+          inputId="switcher-rtl"
+          [(ngModel)]="rtl"
+          (ngModelChange)="themeState.toggleRtl(rtl())"
+          ariaLabel="Toggle right-to-left layout"
+        />
+      </div>
+    </div>
+  </div>
+</p-popover>

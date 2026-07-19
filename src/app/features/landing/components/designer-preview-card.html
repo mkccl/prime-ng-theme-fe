@@ -1,69 +1,136 @@
 <div class="preview-window">
   <div class="preview-titlebar">
-    <span class="preview-dot preview-dot--red"></span>
-    <span class="preview-dot preview-dot--yellow"></span>
-    <span class="preview-dot preview-dot--green"></span>
-    <span class="preview-titlebar-text">Theme Designer</span>
-  </div>
-  <div class="preview-body">
-    <div class="preview-sidebar">
-      <div class="preview-tab preview-tab--active">
-        <i class="pi pi-palette"></i>
-        <span>Colors</span>
-      </div>
-      <div class="preview-tab">
-        <i class="pi pi-at"></i>
-        <span>Typography</span>
-      </div>
-      <div class="preview-tab">
-        <i class="pi pi-box"></i>
-        <span>Components</span>
-      </div>
-      <div class="preview-tab">
-        <i class="pi pi-sliders-h"></i>
-        <span>Spacing</span>
-      </div>
+    <div class="preview-dots" aria-hidden="true">
+      <span class="preview-dot preview-dot--red"></span>
+      <span class="preview-dot preview-dot--yellow"></span>
+      <span class="preview-dot preview-dot--green"></span>
     </div>
-    <div class="preview-main">
-      <div class="preview-section-label">Primary Palette</div>
-      <div class="preview-swatch-grid">
-        <div class="preview-swatch" style="background: var(--p-primary-50)">
-          <span>50</span>
+    <span class="preview-titlebar-text">theme-studio / token-system</span>
+    <span class="preview-saved"><i class="pi pi-check-circle" aria-hidden="true"></i> Saved</span>
+  </div>
+
+  <div class="preview-body">
+    <div class="layer-list" role="group" aria-label="Token layers">
+      @for (layer of layers; track layer.id) {
+        <button
+          type="button"
+          class="layer-button"
+          [class.layer-button--active]="activeLayer() === layer.id"
+          [attr.aria-pressed]="activeLayer() === layer.id"
+          (click)="selectLayer(layer.id)"
+        >
+          <span class="layer-icon" aria-hidden="true"><i [class]="layer.icon"></i></span>
+          <span>
+            <strong>{{ layer.label }}</strong>
+            <small>{{ layer.description }}</small>
+          </span>
+          <i class="pi pi-chevron-right layer-arrow" aria-hidden="true"></i>
+        </button>
+      }
+    </div>
+
+    <div class="token-workspace">
+      <section class="token-panel" aria-live="polite">
+        @switch (activeLayer()) {
+          @case ('primitive') {
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Primitive palette</span>
+                <h3>Emerald</h3>
+              </div>
+              <span class="token-path">primitive.emerald</span>
+            </div>
+            <div class="palette-grid" aria-label="Current primary palette">
+              @for (shade of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]; track shade) {
+                <div
+                  class="palette-swatch"
+                  [style.background]="'var(--p-primary-' + shade + ')'"
+                  [attr.aria-label]="'Primary shade ' + shade"
+                >
+                  <span>{{ shade }}</span>
+                </div>
+              }
+            </div>
+            <div class="token-code">
+              <span>500</span>
+              <code>var(--p-primary-500)</code>
+              <i class="pi pi-link" aria-hidden="true"></i>
+            </div>
+          }
+          @case ('semantic') {
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Semantic roles</span>
+                <h3>Primary interaction</h3>
+              </div>
+              <span class="token-path">semantic.primary</span>
+            </div>
+            <div class="semantic-list">
+              <div>
+                <span class="semantic-dot semantic-dot--color"></span>
+                <span><strong>Color</strong><small>primary.500</small></span>
+                <code>--p-primary-color</code>
+              </div>
+              <div>
+                <span class="semantic-dot semantic-dot--contrast"></span>
+                <span><strong>Contrast</strong><small>surface.0</small></span>
+                <code>--p-primary-contrast-color</code>
+              </div>
+              <div>
+                <span class="semantic-dot semantic-dot--hover"></span>
+                <span><strong>Hover</strong><small>primary.600</small></span>
+                <code>--p-primary-hover-color</code>
+              </div>
+            </div>
+          }
+          @case ('component') {
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Component tokens</span>
+                <h3>Button</h3>
+              </div>
+              <span class="token-path">button.primary</span>
+            </div>
+            <div class="component-token-grid">
+              <div><span>Border radius</span><code>0.5rem</code></div>
+              <div><span>Padding X</span><code>1rem</code></div>
+              <div><span>Gap</span><code>0.5rem</code></div>
+              <div><span>Font weight</span><code>600</code></div>
+            </div>
+          }
+        }
+      </section>
+
+      <section class="component-sample" aria-label="Live PrimeNG component sample">
+        <div class="sample-heading">
+          <span>Live component output</span>
+          <span class="sample-mode"><i class="pi pi-sun" aria-hidden="true"></i> Synced</span>
         </div>
-        <div class="preview-swatch" style="background: var(--p-primary-100)">
-          <span>100</span>
+        <div class="sample-content">
+          <div class="sample-row">
+            <p-button label="Create theme" icon="pi pi-sparkles" size="small" />
+            <p-button label="Preview" severity="secondary" variant="outlined" size="small" />
+          </div>
+          <label for="sample-theme-name">Theme name</label>
+          <input id="sample-theme-name" pInputText value="Emerald workspace" readonly />
+          <div class="sample-status">
+            <span><i class="pi pi-box" aria-hidden="true"></i> Component audit</span>
+            <p-tag value="Ready" severity="success" icon="pi pi-check" />
+          </div>
+          <div class="sample-table" role="table" aria-label="Sample token audit row">
+            <div role="row" class="sample-table-header">
+              <span role="columnheader">Token</span>
+              <span role="columnheader">Layer</span>
+              <span role="columnheader">Value</span>
+            </div>
+            <div role="row">
+              <span role="cell">primary.color</span>
+              <span role="cell">Semantic</span>
+              <code role="cell">500</code>
+            </div>
+          </div>
         </div>
-        <div class="preview-swatch" style="background: var(--p-primary-200)">
-          <span>200</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-300)">
-          <span>300</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-400)">
-          <span>400</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-500)">
-          <span>500</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-600)">
-          <span>600</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-700)">
-          <span>700</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-800)">
-          <span>800</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-900)">
-          <span>900</span>
-        </div>
-        <div class="preview-swatch" style="background: var(--p-primary-950)">
-          <span>950</span>
-        </div>
-        <div class="preview-swatch preview-swatch--main" style="background: var(--p-primary-color)">
-          <span>Primary</span>
-        </div>
-      </div>
+      </section>
     </div>
   </div>
 </div>

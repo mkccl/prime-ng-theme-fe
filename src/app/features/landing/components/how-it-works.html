@@ -1,0 +1,32 @@
+<section id="workflow" class="workflow" aria-labelledby="workflow-title">
+  <header class="workflow-heading fade-up" style="--delay: 0.04s">
+    <div>
+      <span class="workflow-kicker">A focused workflow</span>
+      <h2 id="workflow-title">From a strong foundation to a theme your team can ship.</h2>
+    </div>
+    <p>
+      Stay inside one visual loop from the first palette decision to the final preset. No detached
+      spreadsheets, no hand-maintained CSS patchwork.
+    </p>
+  </header>
+
+  <ol class="workflow-list">
+    @for (step of steps; track step.number; let index = $index) {
+      <li class="how-step fade-up" [style.--delay]="index * 0.08 + 's'">
+        <span class="step-number">{{ step.number }}</span>
+        <span class="step-icon" aria-hidden="true"><i [class]="step.icon"></i></span>
+        <div class="step-copy">
+          <span class="step-detail">{{ step.detail }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </div>
+        <span class="step-line" aria-hidden="true"></span>
+      </li>
+    }
+  </ol>
+
+  <div class="workflow-action fade-up" style="--delay: 0.24s">
+    <a routerLink="/designer">Open the visual designer <i class="pi pi-arrow-right" aria-hidden="true"></i></a>
+    <span>Every change remains yours to inspect and export.</span>
+  </div>
+</section>

@@ -16,17 +16,21 @@ describe('HowItWorks', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render three steps', async () => {
+  it('should render three workflow steps', async () => {
     const fixture = TestBed.createComponent(HowItWorks);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
+
     expect(el.querySelectorAll('.how-step').length).toBe(3);
+    expect(el.querySelectorAll('.step-number').length).toBe(3);
   });
 
-  it('should render section title', async () => {
+  it('should render the workflow heading and designer action', async () => {
     const fixture = TestBed.createComponent(HowItWorks);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.how-title')).toBeTruthy();
+
+    expect(el.querySelector('#workflow-title')).toBeTruthy();
+    expect(el.querySelector('.workflow-action a')?.textContent).toContain('Open the visual designer');
   });
 });

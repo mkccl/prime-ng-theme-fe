@@ -1,81 +1,92 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ThemeStateService } from './theme-state.service';
+import Aura from '@primeuix/themes/aura';
+import { providePrimeNG } from 'primeng/config';
+
+import { ThemeState, ThemeStateService } from './theme-state.service';
 
 describe('ThemeStateService', () => {
   let service: ThemeStateService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ThemeStateService);
     document.documentElement.classList.remove('p-dark');
+    document.documentElement.dir = 'ltr';
+    delete (document as Document & { __themeState?: ThemeState }).__themeState;
+
+    TestBed.configureTestingModule({
+      providers: [providePrimeNG({ theme: { preset: Aura } })],
+    });
+    service = TestBed.inject(ThemeStateService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should have default primary as emerald', () => {
+  it('should expose defaults that match the configured application preset', () => {
     expect(service.selectedPrimary()).toBe('emerald');
-  });
-
-  it('should have default surface as slate', () => {
     expect(service.selectedSurface()).toBe('slate');
-  });
-
-  it('should have default preset as Aura', () => {
-    expect(service.selectedPreset()).toBe('Aura');
-  });
-
-  it('should default to light mode', () => {
-    expect(service.isDark()).toBe(false);
-  });
-
-  it('should update primary selection', () => {
-    service.setPrimary('blue');
-    expect(service.selectedPrimary()).toBe('blue');
-  });
-
-  it('should update surface selection', () => {
-    service.setSurface('zinc');
-    expect(service.selectedSurface()).toBe('zinc');
-  });
-
-  it('should update preset selection', () => {
-    service.setPreset('Material');
     expect(service.selectedPreset()).toBe('Material');
   });
 
-  it('should toggle dark mode on', () => {
+  it('should store the initial theme state on document', () => {
+    const stored = (document as Document & { __themeState?: ThemeState }).__themeState;
+
+    expect(stored).toEqual({
+      primary: 'emerald',
+      surface: 'slate',
+      preset: 'Material',
+      isDark: false,
+    });
+  });
+
+  it('should update primary and surface selections', () => {
+    service.setPrimary('blue');
+    service.setSurface('zinc');
+
+    expect(service.selectedPrimary()).toBe('blue');
+    expect(service.selectedSurface()).toBe('zinc');
+  });
+
+  it('should update a valid preset and ignore an unknown preset', () => {
+    service.setPreset('Lara');
+    expect(service.selectedPreset()).toBe('Lara');
+
+    service.setPreset('Unknown');
+    expect(service.selectedPreset()).toBe('Lara');
+  });
+
+  it('should toggle dark mode and its document class', () => {
     service.toggleDark();
     expect(service.isDark()).toBe(true);
     expect(document.documentElement.classList.contains('p-dark')).toBe(true);
-  });
 
-  it('should toggle dark mode off again', () => {
-    service.toggleDark();
     service.toggleDark();
     expect(service.isDark()).toBe(false);
     expect(document.documentElement.classList.contains('p-dark')).toBe(false);
   });
 
-  it('should return correct theme state', () => {
+  it('should broadcast the exact resulting state', () => {
+    let emitted: ThemeState | undefined;
+    const listener = (event: Event) => {
+      emitted = (event as CustomEvent<ThemeState>).detail;
+    };
+    document.addEventListener('theme-switcher-change', listener, { once: true });
+
     service.setPrimary('rose');
-    service.setSurface('stone');
-    const state = service.getThemeState();
-    expect(state.primary).toBe('rose');
-    expect(state.surface).toBe('stone');
-    expect(state.preset).toBe('Aura');
-    expect(state.isDark).toBe(false);
+
+    expect(emitted).toEqual({
+      primary: 'rose',
+      surface: 'slate',
+      preset: 'Material',
+      isDark: false,
+    });
+    expect((document as Document & { __themeState?: ThemeState }).__themeState).toEqual(emitted);
   });
 
-  it('should expose primary colors array', () => {
-    expect(service.primaryColors.length).toBeGreaterThan(0);
-    expect(service.primaryColors[0]).toHaveProperty('name');
-    expect(service.primaryColors[0]).toHaveProperty('color');
-  });
-
-  it('should expose surface colors array', () => {
+  it('should expose all configured choices', () => {
+    expect(service.primaryColors.length).toBe(17);
     expect(service.surfaceColors.length).toBe(5);
+    expect(service.presetOptions).toEqual(['Aura', 'Material', 'Lara', 'Nora']);
   });
 });

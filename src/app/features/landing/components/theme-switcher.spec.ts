@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { providePrimeNG } from 'primeng/config';
+
 import Aura from '@primeuix/themes/aura';
+import { providePrimeNG } from 'primeng/config';
 
 import { ThemeSwitcher } from './theme-switcher';
 
@@ -22,44 +23,51 @@ describe('ThemeSwitcher', () => {
     el = fixture.nativeElement as HTMLElement;
   });
 
+  afterEach(() => {
+    document.querySelectorAll('.p-popover').forEach((popover) => popover.remove());
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render trigger button with cog icon', () => {
-    const btn = el.querySelector('.switcher-trigger');
-    expect(btn).toBeTruthy();
-    const icon = btn?.querySelector('.pi-cog');
-    expect(icon).toBeTruthy();
+  it('should render an accessible trigger button', () => {
+    const button = el.querySelector<HTMLButtonElement>('.switcher-trigger');
+
+    expect(button).toBeTruthy();
+    expect(button?.getAttribute('aria-label')).toBe('Open theme settings');
+    expect(button?.querySelector('.pi-cog')).toBeTruthy();
   });
 
-  it('should render primary color label', async () => {
-    const btn = el.querySelector('.switcher-trigger') as HTMLButtonElement;
-    btn.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const labels = document.querySelectorAll('.switcher-label');
-    const primaryLabel = Array.from(labels).find((l) => l.textContent?.trim() === 'Primary');
-    expect(primaryLabel).toBeTruthy();
+  it('should render labeled theme control groups', async () => {
+    await openPopover();
+    const labels = Array.from(document.querySelectorAll('.switcher-label')).map((label) =>
+      label.textContent?.trim(),
+    );
+
+    expect(labels).toEqual(expect.arrayContaining(['Primary', 'Surface', 'Preset']));
   });
 
-  it('should render surface color label', async () => {
-    const btn = el.querySelector('.switcher-trigger') as HTMLButtonElement;
-    btn.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const labels = document.querySelectorAll('.switcher-label');
-    const surfaceLabel = Array.from(labels).find((l) => l.textContent?.trim() === 'Surface');
-    expect(surfaceLabel).toBeTruthy();
+  it('should expose pressed state for selected colors and preset', async () => {
+    await openPopover();
+    const selectedSwatches = document.querySelectorAll('.switcher-swatch[aria-pressed="true"]');
+    const selectedPreset = document.querySelector('.switcher-preset-btn[aria-pressed="true"]');
+
+    expect(selectedSwatches.length).toBe(2);
+    expect(selectedPreset?.textContent?.trim()).toBe('Material');
   });
 
-  it('should render preset label', async () => {
-    const btn = el.querySelector('.switcher-trigger') as HTMLButtonElement;
-    btn.click();
+  it('should associate labels with toggle inputs', async () => {
+    await openPopover();
+
+    expect(document.querySelector('label[for="switcher-dark-mode"]')).toBeTruthy();
+    expect(document.querySelector('label[for="switcher-ripple"]')).toBeTruthy();
+    expect(document.querySelector('label[for="switcher-rtl"]')).toBeTruthy();
+  });
+
+  async function openPopover(): Promise<void> {
+    el.querySelector<HTMLButtonElement>('.switcher-trigger')?.click();
     fixture.detectChanges();
     await fixture.whenStable();
-    const labels = document.querySelectorAll('.switcher-label');
-    const presetLabel = Array.from(labels).find((l) => l.textContent?.trim() === 'Preset');
-    expect(presetLabel).toBeTruthy();
-  });
+  }
 });

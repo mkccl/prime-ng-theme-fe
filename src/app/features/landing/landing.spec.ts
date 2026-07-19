@@ -16,73 +16,64 @@ describe('Landing', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render hero section', async () => {
+  it('should render accessible page landmarks', async () => {
     const fixture = TestBed.createComponent(Landing);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.hero')).toBeTruthy();
-    expect(el.querySelector('.hero-headline')).toBeTruthy();
+
+    expect(el.querySelector('.skip-link')?.getAttribute('href')).toBe('#main-content');
+    expect(el.querySelector('header nav[aria-label="Primary navigation"]')).toBeTruthy();
+    expect(el.querySelector('main#main-content')).toBeTruthy();
+    expect(el.querySelector('footer.site-footer')).toBeTruthy();
   });
 
-  it('should render nav', async () => {
+  it('should render one hero heading and primary actions', async () => {
     const fixture = TestBed.createComponent(Landing);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.nav')).toBeTruthy();
+
+    expect(el.querySelectorAll('h1').length).toBe(1);
+    expect(el.querySelector('#hero-title')?.textContent).toContain('Design the system');
+    expect(el.querySelector('.hero-actions a[routerlink="/designer"]')).toBeTruthy();
   });
 
-  it('should render component preview cards', async () => {
+  it('should render the deferred dashboard placeholder', async () => {
     const fixture = TestBed.createComponent(Landing);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    const cards = el.querySelectorAll('.component-card');
-    expect(cards.length).toBe(9);
+
+    expect(el.querySelector('#preview')).toBeTruthy();
+    expect(el.querySelector('.dashboard-placeholder')).toBeTruthy();
   });
 
-  it('should render footer', async () => {
+  it('should render four proof points and four capabilities', async () => {
     const fixture = TestBed.createComponent(Landing);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.site-footer')).toBeTruthy();
+
+    expect(el.querySelectorAll('.proof-item').length).toBe(4);
+    expect(el.querySelectorAll('.capability').length).toBe(4);
   });
 
-  it('should render theme switcher', async () => {
+  it('should render the token story and workflow', async () => {
     const fixture = TestBed.createComponent(Landing);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('app-designer-preview-card')).toBeTruthy();
+    expect(el.querySelector('app-how-it-works')).toBeTruthy();
+  });
+
+  it('should render the theme switcher', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+
     expect(el.querySelector('app-theme-switcher')).toBeTruthy();
   });
 
   it('should start with isScrolled false', () => {
     const fixture = TestBed.createComponent(Landing);
     expect(fixture.componentInstance['isScrolled']()).toBe(false);
-  });
-
-  it('should render the live designer preview card', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('app-designer-preview-card')).toBeTruthy();
-  });
-
-  it('should render the how it works section', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('app-how-it-works')).toBeTruthy();
-  });
-
-  it('should render hero stats', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.hero-stats')).toBeTruthy();
-  });
-
-  it('should render the inline color bar', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.hero-colorbar')).toBeTruthy();
   });
 });

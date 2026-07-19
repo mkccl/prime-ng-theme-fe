@@ -1,9 +1,6 @@
 /* ───────────────────── Fonts & Custom Properties ───────────────────── */
 
 :host {
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   display: block;
   font-family: var(--font-body);
   color: var(--p-text-color);
@@ -147,12 +144,8 @@
 .hero {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 6rem 2rem 4rem;
-  max-width: 860px;
+  padding: 5rem 2rem 5rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -172,7 +165,7 @@
 
 .hero-headline {
   font-family: var(--font-display);
-  font-size: 4.5rem;
+  font-size: 3.75rem;
   font-weight: 400;
   line-height: 1.08;
   margin: 0 0 1.5rem;
@@ -206,44 +199,6 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 3rem;
-}
-
-.hero-install {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.625rem 1.25rem;
-  border-radius: 8px;
-  background: var(--p-surface-900);
-  color: var(--p-surface-100);
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  border: 1px solid var(--p-surface-700);
-}
-
-:host-context(.p-dark) .hero-install {
-  background: var(--p-surface-100);
-  color: var(--p-surface-900);
-  border-color: var(--p-surface-300);
-}
-
-.hero-install code {
-  user-select: all;
-}
-
-.hero-install .install-prompt {
-  color: var(--p-primary-400);
-  user-select: none;
-}
-
-/* ───────────────────── Designer Preview ───────────────────── */
-
-.designer-preview-section {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  padding: 0 2rem 5rem;
 }
 
 /* ───────────────────── Features Grid ───────────────────── */
@@ -627,12 +582,13 @@
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 2rem 1rem;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 3rem 2rem 2rem;
   font-size: 0.8125rem;
   color: var(--p-text-muted-color);
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .site-footer .pi-heart-fill {
@@ -651,27 +607,7 @@
 
 /* ───────────────────── Animations ───────────────────── */
 
-.fade-up {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: fade-up 0.6s ease-out forwards;
-  animation-delay: var(--delay, 0s);
-}
-
-@keyframes fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .fade-up {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-
   .blob {
     animation: none;
   }
@@ -688,7 +624,7 @@
 
 @media (max-width: 768px) {
   .hero-headline {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .section-title {
@@ -701,6 +637,7 @@
 
   .hero-actions {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .features-grid,
@@ -716,6 +653,10 @@
     padding: 0.75rem 1rem;
   }
 
+  .nav-cta {
+    display: none;
+  }
+
   .cta-banner {
     padding: 3rem 1.5rem;
   }
@@ -727,7 +668,7 @@
 
 @media (max-width: 480px) {
   .hero-headline {
-    font-size: 2.25rem;
+    font-size: 2rem;
   }
 
   .hero-subtitle {
@@ -736,10 +677,5 @@
 
   .section-title {
     font-size: 1.75rem;
-  }
-
-  .hero-install {
-    font-size: 0.75rem;
-    padding: 0.5rem 1rem;
   }
 }

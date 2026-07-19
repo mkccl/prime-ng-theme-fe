@@ -7,6 +7,19 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4.0',
+    date: '2026-07-19',
+    title: 'Interactive Landing Page & Angular 22',
+    changes: [
+      { type: 'added', text: 'Interactive hero preview with live primary color controls and theme statistics' },
+      { type: 'added', text: 'How It Works walkthrough and expanded landing page presentation' },
+      { type: 'changed', text: 'Upgraded Angular, Angular CLI, and Angular build tooling to version 22' },
+      { type: 'changed', text: 'Upgraded PrimeNG to 22, PrimeUIX themes to 3, PrimeIcons to 8, and supporting packages' },
+      { type: 'changed', text: 'Updated Tailwind CSS, Vitest, jsdom, TypeScript, RxJS, and npm tooling' },
+      { type: 'fixed', text: 'Updated table components and selectors for PrimeNG 22 compatibility' },
+    ],
+  },
+  {
     version: '1.3.0',
     date: '2026-03-18',
     title: 'Enhanced Landing Page & System Dark Mode',

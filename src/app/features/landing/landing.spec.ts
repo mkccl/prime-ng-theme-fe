@@ -57,4 +57,32 @@ describe('Landing', () => {
     const fixture = TestBed.createComponent(Landing);
     expect(fixture.componentInstance['isScrolled']()).toBe(false);
   });
+
+  it('should render the live designer preview card', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('app-designer-preview-card')).toBeTruthy();
+  });
+
+  it('should render the how it works section', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('app-how-it-works')).toBeTruthy();
+  });
+
+  it('should render hero stats', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.hero-stats')).toBeTruthy();
+  });
+
+  it('should render the inline color bar', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.hero-colorbar')).toBeTruthy();
+  });
 });

@@ -26,7 +26,10 @@ import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 
+import { DesignerPreviewCard } from './components/designer-preview-card';
+import { HowItWorks } from './components/how-it-works';
 import { ThemeSwitcher } from './components/theme-switcher';
+import { ThemeStateService } from './services/theme-state.service';
 
 @Component({
   selector: 'app-landing',
@@ -51,6 +54,8 @@ import { ThemeSwitcher } from './components/theme-switcher';
     Tag,
     ToggleSwitch,
     ThemeSwitcher,
+    DesignerPreviewCard,
+    HowItWorks,
   ],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
@@ -59,7 +64,16 @@ import { ThemeSwitcher } from './components/theme-switcher';
 export class Landing {
   private readonly destroyRef = inject(DestroyRef);
 
+  protected readonly themeState = inject(ThemeStateService);
+
   protected readonly isScrolled = signal(false);
+
+  protected readonly stats = [
+    { value: '4', label: 'Built-in presets' },
+    { value: '17', label: 'Color palettes' },
+    { value: '90+', label: 'Themed components' },
+    { value: '100%', label: 'Open source' },
+  ];
 
   protected readonly previewChecked = signal(true);
   protected readonly previewSwitch = signal(true);

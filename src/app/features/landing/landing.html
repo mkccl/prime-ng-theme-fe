@@ -1,8 +1,10 @@
-<!-- Ambient blobs -->
+<!-- Ambient background -->
 <div class="ambient" aria-hidden="true">
   <div class="blob blob--1"></div>
   <div class="blob blob--2"></div>
   <div class="blob blob--3"></div>
+  <div class="blob blob--4"></div>
+  <div class="grid-overlay"></div>
 </div>
 
 <!-- Nav -->
@@ -12,6 +14,7 @@
     <span class="nav-logo-text">Theme Studio</span>
   </a>
   <div class="nav-right">
+    <a routerLink="/designer" class="nav-cta">Designer</a>
     <app-theme-switcher />
     <a routerLink="/changelog" class="nav-link" title="Changelog">
       <i class="pi pi-list"></i>
@@ -24,31 +27,63 @@
 
 <!-- Hero -->
 <section class="hero">
-  <span class="hero-badge fade-up" style="--delay: 0s">
-    <i class="pi pi-sparkles"></i>
-    Open Source Theme Designer
-  </span>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="hero-badge fade-up" style="--delay: 0s">
+        <i class="pi pi-sparkles"></i>
+        Open Source Theme Designer
+      </span>
 
-  <h1 class="hero-headline fade-up" style="--delay: 0.1s">
-    Design <em>beautiful</em> PrimeNG themes, visually.
-  </h1>
+      <h1 class="hero-headline fade-up" style="--delay: 0.1s">
+        Design <em>beautiful</em> PrimeNG themes, visually.
+      </h1>
 
-  <p class="hero-subtitle fade-up" style="--delay: 0.2s">
-    Customize every design token, preview changes in real time, and export production-ready themes —
-    no manual CSS required.
-  </p>
+      <p class="hero-subtitle fade-up" style="--delay: 0.2s">
+        Customize every design token, preview changes in real time, and export production-ready
+        themes — no manual CSS required.
+      </p>
 
-  <div class="hero-actions fade-up" style="--delay: 0.3s">
-    <a routerLink="/designer">
-      <p-button label="Start Designing" icon="pi pi-arrow-right" iconPos="right" />
-    </a>
+      <div class="hero-actions fade-up" style="--delay: 0.3s">
+        <a routerLink="/designer">
+          <p-button label="Start Designing" icon="pi pi-arrow-right" iconPos="right" />
+        </a>
+        <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">
+          <p-button label="Star on GitHub" icon="pi pi-github" severity="secondary" [outlined]="true" />
+        </a>
+      </div>
+
+      <div class="hero-stats fade-up" style="--delay: 0.4s">
+        @for (s of stats; track s.label) {
+          <div class="hero-stat">
+            <span class="hero-stat-value">{{ s.value }}</span>
+            <span class="hero-stat-label">{{ s.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="hero-visual fade-up" style="--delay: 0.35s">
+      <div class="hero-visual-glow"></div>
+      <div class="hero-live-bar">
+        <span class="hero-live-tag"><i class="pi pi-circle-fill"></i> Live</span>
+        <span class="hero-live-hint">Tap a color to recolor the whole page</span>
+      </div>
+      <div class="hero-colorbar">
+        @for (c of themeState.primaryColors; track c.name) {
+          <button
+            class="hero-colorbar-swatch"
+            [class.hero-colorbar-swatch--active]="themeState.selectedPrimary() === c.name"
+            [style.backgroundColor]="c.color"
+            [title]="c.name"
+            (click)="themeState.setPrimary(c.name)"
+          ></button>
+        }
+      </div>
+      <app-designer-preview-card />
+    </div>
   </div>
 </section>
 
-<!-- Designer Preview -->
-<!--<section class="designer-preview-section fade-up" style="&#45;&#45;delay: 0.5s">-->
-<!--  <app-designer-preview-card />-->
-<!--</section>-->
 
 <!-- Component Preview -->
 <section class="components-section">
@@ -60,7 +95,22 @@
     </p>
   </div>
 
-  <div class="components-grid">
+  <div class="app-window fade-up" style="--delay: 0.15s">
+    <div class="app-window-titlebar">
+      <span class="app-window-dot app-window-dot--red"></span>
+      <span class="app-window-dot app-window-dot--yellow"></span>
+      <span class="app-window-dot app-window-dot--green"></span>
+      <span class="app-window-title">theme-studio — Preview</span>
+      <span class="app-window-live"><i class="pi pi-circle-fill"></i> Live</span>
+    </div>
+    <div class="app-window-tabs">
+      <span class="app-window-tab app-window-tab--active">Components</span>
+      <span class="app-window-tab">Forms</span>
+      <span class="app-window-tab">Data</span>
+      <span class="app-window-tab">Overlay</span>
+    </div>
+    <div class="app-window-body">
+      <div class="components-grid">
     <!-- Buttons -->
     <div class="component-card fade-up" style="--delay: 0.1s">
       <span class="component-card-label">Buttons</span>
@@ -158,6 +208,8 @@
       <span class="component-card-label">Slider</span>
       <div class="component-card-content" style="width: 100%">
         <p-slider [(ngModel)]="previewSlider" style="width: 100%" />
+      </div>
+    </div>
       </div>
     </div>
   </div>
@@ -329,6 +381,8 @@
   </div>
 </section>
 
+<app-how-it-works />
+
 <!-- Features -->
 <section class="features-section">
   <div class="section-header fade-up" style="--delay: 0.1s">
@@ -381,22 +435,49 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-banner fade-up" style="--delay: 0.1s">
-    <h2 class="cta-heading">Ready to design your theme?</h2>
+    <div class="cta-glow"></div>
+    <span class="cta-eyebrow">Ready when you are</span>
+    <h2 class="cta-heading">Design your perfect PrimeNG theme</h2>
     <p class="cta-subtext">
       Jump into the designer and start customizing. Export when you're done — it's that simple.
     </p>
-    <a routerLink="/designer">
-      <p-button label="Start Designing" icon="pi pi-arrow-right" iconPos="right" />
-    </a>
+    <div class="cta-actions">
+      <a routerLink="/designer">
+        <p-button label="Start Designing" icon="pi pi-arrow-right" iconPos="right" />
+      </a>
+      <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">
+        <p-button label="View on GitHub" icon="pi pi-github" severity="secondary" [outlined]="true" />
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- Footer -->
 <footer class="site-footer">
-  <span>made by ccl with</span>
-  <i class="pi pi-heart-fill"></i>
-  <span>open source on</span>
-  <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">
-    <i class="pi pi-github"></i> GitHub
-  </a>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <i class="pi pi-prime"></i>
+      <span>Theme Studio</span>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a routerLink="/designer">Designer</a>
+        <a routerLink="/changelog">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="https://primeng.org" target="_blank" rel="noopener">PrimeNG</a>
+        <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>made by ccl with</span>
+    <i class="pi pi-heart-fill"></i>
+    <span>open source on</span>
+    <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">
+      <i class="pi pi-github"></i> GitHub
+    </a>
+  </div>
 </footer>

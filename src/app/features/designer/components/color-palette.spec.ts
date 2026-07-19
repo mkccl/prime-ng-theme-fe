@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ColorPalette } from './color-palette';
 
 @Component({
   standalone: true,
   imports: [ColorPalette],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<design-color-palette [value]="value()" />`,
 })
 class TestHost {

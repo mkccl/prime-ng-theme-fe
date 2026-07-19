@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { TokenField } from './token-field';
@@ -8,6 +8,7 @@ import { ThemeDesignerService } from '../services/theme-designer.service';
 @Component({
   standalone: true,
   imports: [TokenField],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <design-token-field [label]="label()" [type]="type()" [(modelValue)]="value" /> `,
 })
 class TestHost {

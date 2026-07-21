@@ -1,79 +1,66 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import Aura from '@primeuix/themes/aura';
+import { providePrimeNG } from 'primeng/config';
+
 import { Landing } from './landing';
 
 describe('Landing', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Landing],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), providePrimeNG({ theme: { preset: Aura } })],
     }).compileComponents();
   });
 
-  it('should create', () => {
+  it('renders the source-style page landmarks', async () => {
     const fixture = TestBed.createComponent(Landing);
-    expect(fixture.componentInstance).toBeTruthy();
-  });
-
-  it('should render accessible page landmarks', async () => {
-    const fixture = TestBed.createComponent(Landing);
+    fixture.detectChanges();
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
 
     expect(el.querySelector('.skip-link')?.getAttribute('href')).toBe('#main-content');
-    expect(el.querySelector('header nav[aria-label="Primary navigation"]')).toBeTruthy();
+    expect(el.querySelector('.layout-topbar')).toBeTruthy();
+    expect(el.querySelector('.landing-announcement')).toBeTruthy();
     expect(el.querySelector('main#main-content')).toBeTruthy();
-    expect(el.querySelector('footer.site-footer')).toBeTruthy();
+    expect(el.querySelector('footer.landing-footer')).toBeTruthy();
   });
 
-  it('should render one hero heading and primary actions', async () => {
+  it('renders the hero, live dashboard, feature grid, and customer component', async () => {
     const fixture = TestBed.createComponent(Landing);
+    fixture.detectChanges();
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
 
     expect(el.querySelectorAll('h1').length).toBe(1);
-    expect(el.querySelector('#hero-title')?.textContent).toContain('Design the system');
-    expect(el.querySelector('.hero-actions a[routerlink="/designer"]')).toBeTruthy();
+    expect(el.querySelector('#hero-title')?.textContent).toContain('Visual Theme Studio');
+    expect(el.querySelector('app-live-dashboard')).toBeTruthy();
+    expect(el.querySelectorAll('.feature-card').length).toBe(4);
+    expect(el.querySelector('.feature-card')?.textContent).toContain('Design Editor');
+    expect(el.querySelector('app-customer-showcase')).toBeTruthy();
   });
 
-  it('should render the deferred dashboard placeholder', async () => {
+  it('exposes six interactive mobile sample options', async () => {
     const fixture = TestBed.createComponent(Landing);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelectorAll('.sample-selector button').length).toBe(6);
+  });
+
+  it('opens and closes the keyboard-style search dialog', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    fixture.detectChanges();
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
 
-    expect(el.querySelector('#preview')).toBeTruthy();
-    expect(el.querySelector('.dashboard-placeholder')).toBeTruthy();
-  });
+    el.querySelector<HTMLButtonElement>('.search-control')?.click();
+    fixture.detectChanges();
+    expect(el.querySelector('[role="dialog"]')).toBeTruthy();
 
-  it('should render four proof points and four capabilities', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-
-    expect(el.querySelectorAll('.proof-item').length).toBe(4);
-    expect(el.querySelectorAll('.capability').length).toBe(4);
-  });
-
-  it('should render the token story and workflow', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-
-    expect(el.querySelector('app-designer-preview-card')).toBeTruthy();
-    expect(el.querySelector('app-how-it-works')).toBeTruthy();
-  });
-
-  it('should render the theme switcher', async () => {
-    const fixture = TestBed.createComponent(Landing);
-    await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
-
-    expect(el.querySelector('app-theme-switcher')).toBeTruthy();
-  });
-
-  it('should start with isScrolled false', () => {
-    const fixture = TestBed.createComponent(Landing);
-    expect(fixture.componentInstance['isScrolled']()).toBe(false);
+    el.querySelector<HTMLButtonElement>('.search-dialog header button')?.click();
+    fixture.detectChanges();
+    expect(el.querySelector('[role="dialog"]')).toBeFalsy();
   });
 });

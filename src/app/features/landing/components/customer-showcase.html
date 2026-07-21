@@ -1,0 +1,57 @@
+<section class="customer-table box" aria-label="Customer component showcase">
+  <header class="table-toolbar">
+    <div>
+      <h3>Customers</h3>
+      <p>Manage your customer relationships</p>
+    </div>
+    <div class="toolbar-actions">
+      <label class="customer-search">
+        <span class="sr-only">Search customers</span>
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <input pInputText type="search" placeholder="Search customers" [ngModel]="query()" (ngModelChange)="setQuery($event)" />
+      </label>
+      <p-button label="Export" icon="pi pi-external-link" severity="secondary" variant="outlined" size="small" />
+    </div>
+  </header>
+
+  <p-table
+    [value]="filteredCustomers()"
+    [paginator]="true"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} customers"
+    [tableStyle]="{ 'min-width': '72rem' }"
+    [rowHover]="true"
+    dataKey="name"
+    [selection]="selectedCustomers()"
+    (selectionChange)="selectedCustomers.set($event)"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+        <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+        <th pSortableColumn="country">Country <p-sortIcon field="country" /></th>
+        <th>Agent</th>
+        <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+        <th pSortableColumn="balance">Balance <p-sortIcon field="balance" /></th>
+        <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+        <th>Activity</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-customer>
+      <tr>
+        <td><p-tableCheckbox [value]="customer" /></td>
+        <td><strong>{{ customer.name }}</strong></td>
+        <td><span class="country"><span class="flag" [class]="'flag flag-' + customer.flag" aria-hidden="true"></span>{{ customer.country }}</span></td>
+        <td><span class="agent"><img [src]="customer.avatar" width="32" height="32" [alt]="customer.representative" />{{ customer.representative }}</span></td>
+        <td>{{ customer.date }}</td>
+        <td>{{ balance(customer.balance) }}</td>
+        <td><p-tag [value]="customer.status" [severity]="severity(customer.status)" /></td>
+        <td><p-progressbar [value]="customer.activity" [showValue]="false" [style]="{ height: '0.4rem', width: '7rem' }" /></td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="8" class="empty-message">No customers match “{{ query() }}”.</td></tr>
+    </ng-template>
+  </p-table>
+</section>

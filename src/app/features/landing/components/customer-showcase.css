@@ -1,0 +1,64 @@
+:host { display: block; min-width: 0; }
+
+.customer-table {
+  overflow: hidden;
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 10px;
+  background: var(--p-content-background);
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--p-text-color), transparent 96%);
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--p-content-border-color);
+}
+
+.table-toolbar h3 { margin: 0; color: var(--p-text-color); font-size: 1rem; }
+.table-toolbar p { margin: 0.25rem 0 0; color: var(--p-text-muted-color); font-size: 0.75rem; }
+.toolbar-actions,
+.customer-search,
+.country,
+.agent { display: flex; align-items: center; }
+.toolbar-actions { gap: 0.75rem; }
+
+.customer-search { position: relative; color: var(--p-text-muted-color); }
+.customer-search > i { position: absolute; left: 0.75rem; z-index: 1; font-size: 0.75rem; }
+.customer-search input { width: 14rem; padding-left: 2rem; font-size: 0.75rem; }
+.country,
+.agent { gap: 0.55rem; }
+.agent img { border-radius: 50%; object-fit: cover; }
+
+.flag {
+  display: inline-block;
+  width: 30px;
+  height: 20px;
+  background: url('/landing/flags-responsive.png') no-repeat;
+  background-size: 100%;
+  vertical-align: middle;
+}
+.flag-al { background-position: 0 2.479339%; }
+.flag-eg { background-position: 0 25.619835%; }
+.flag-pa { background-position: 0 68.181818%; }
+.flag-si { background-position: 0 78.92562%; }
+.flag-za { background-position: 0 98.760331%; }
+
+.empty-message { padding: 3rem !important; color: var(--p-text-muted-color); text-align: center; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+:host ::ng-deep .p-datatable-table th,
+:host ::ng-deep .p-datatable-table td { padding: 0.85rem 1rem; font-size: 0.75rem; white-space: nowrap; }
+:host ::ng-deep .p-datatable-table th { color: var(--p-text-muted-color); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
+:host ::ng-deep .p-paginator { border-top: 1px solid var(--p-content-border-color); }
+:host ::ng-deep .p-tag { text-transform: capitalize; }
+
+@media (max-width: 700px) {
+  .customer-table { max-height: 42rem; overflow: auto; }
+  .table-toolbar { position: sticky; left: 0; width: min(100vw - 2rem, 100%); align-items: stretch; flex-direction: column; }
+  .toolbar-actions { align-items: stretch; flex-direction: column; }
+  .customer-search input { width: 100%; }
+  :host ::ng-deep .p-paginator-current { display: none; }
+}

@@ -1,88 +1,124 @@
+import { DOCUMENT, NgOptimizedImage } from '@angular/common';
 import {
   afterNextRender,
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   signal,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { DesignerPreviewCard } from './components/designer-preview-card';
-import { HowItWorks } from './components/how-it-works';
+import { CustomerShowcase } from './components/customer-showcase';
 import { LiveDashboard } from './components/live-dashboard';
 import { ThemeSwitcher } from './components/theme-switcher';
+import { ThemeStateService } from './services/theme-state.service';
 
-interface ProofPoint {
-  value: string;
-  label: string;
-}
-
-interface Capability {
-  number: string;
+interface FeatureItem {
   icon: string;
   title: string;
   description: string;
 }
 
+interface SampleOption {
+  icon: string;
+  title: string;
+}
+
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, ThemeSwitcher, LiveDashboard, DesignerPreviewCard, HowItWorks],
+  imports: [
+    FormsModule,
+    RouterLink,
+    NgOptimizedImage,
+    ThemeSwitcher,
+    LiveDashboard,
+    CustomerShowcase,
+  ],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Landing {
+  private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
 
+  protected readonly themeState = inject(ThemeStateService);
   protected readonly isScrolled = signal(false);
+  protected readonly searchOpen = signal(false);
+  protected readonly activeSample = signal('Overview');
+  protected readonly sampleImagePath = computed(() => {
+    const sample = this.activeSample() === 'Inbox' ? 'chat' : this.activeSample().toLowerCase();
+    return `/landing/${sample}.jpg`;
+  });
 
-  protected readonly proofPoints: ProofPoint[] = [
-    { value: '4', label: 'Curated presets' },
-    { value: '17', label: 'Primary palettes' },
-    { value: '90+', label: 'Themed components' },
-    { value: '100%', label: 'Open source' },
+  protected readonly sampleOptions: SampleOption[] = [
+    { icon: 'pi pi-home', title: 'Overview' },
+    { icon: 'pi pi-comment', title: 'Chat' },
+    { icon: 'pi pi-inbox', title: 'Inbox' },
+    { icon: 'pi pi-th-large', title: 'Cards' },
+    { icon: 'pi pi-user', title: 'Customers' },
+    { icon: 'pi pi-video', title: 'Movies' },
   ];
 
-  protected readonly capabilities: Capability[] = [
+  protected readonly features: FeatureItem[] = [
     {
-      number: '01',
-      icon: 'pi pi-bolt',
-      title: 'Preview every decision live',
+      icon: '/landing/icon-theme.svg',
+      title: 'Design Editor',
       description:
-        'Change a token once and watch controls, data views, navigation, and overlays respond together.',
+        'Shape primitives, semantic roles, and component tokens in one focused visual workspace.',
     },
     {
-      number: '02',
-      icon: 'pi pi-moon',
-      title: 'Design light and dark as one system',
+      icon: '/landing/icon-accessibility.svg',
+      title: 'Accessibility',
       description:
-        'Shape both color schemes with semantic roles instead of maintaining disconnected CSS overrides.',
+        'Review focus, contrast, hierarchy, and interactive states as part of the same visual loop.',
     },
     {
-      number: '03',
-      icon: 'pi pi-th-large',
-      title: 'Cover the PrimeNG surface area',
+      icon: '/landing/icon-mobile.svg',
+      title: 'Responsive Preview',
       description:
-        'Move from primitives to component-level detail while keeping one coherent visual language.',
+        'Review how your theme behaves across desktop and touch-friendly mobile layouts.',
     },
     {
-      number: '04',
-      icon: 'pi pi-code',
-      title: 'Export code your team owns',
+      icon: '/landing/icon-ts.svg',
+      title: 'Typed Theme Export',
       description:
-        'Generate a typed preset, review it in source control, and ship it with your Angular application.',
+        'Export a typed PrimeNG preset that fits directly into your Angular application.',
     },
   ];
 
   constructor() {
     afterNextRender(() => {
-      const onScroll = () => this.isScrolled.set(window.scrollY > 20);
+      const windowRef = this.document.defaultView;
+      if (!windowRef) return;
+
+      const onScroll = () => this.isScrolled.set(windowRef.scrollY > 0);
+      const onKeydown = (event: KeyboardEvent) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          this.searchOpen.set(true);
+        }
+
+        if (event.key === 'Escape') {
+          this.searchOpen.set(false);
+        }
+      };
 
       onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
-      this.destroyRef.onDestroy(() => window.removeEventListener('scroll', onScroll));
+      windowRef.addEventListener('scroll', onScroll, { passive: true });
+      windowRef.addEventListener('keydown', onKeydown);
+      this.destroyRef.onDestroy(() => {
+        windowRef.removeEventListener('scroll', onScroll);
+        windowRef.removeEventListener('keydown', onKeydown);
+      });
     });
+  }
+
+  protected selectSample(title: string): void {
+    this.activeSample.set(title);
   }
 }

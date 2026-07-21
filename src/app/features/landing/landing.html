@@ -1,200 +1,154 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
-<header class="site-header" [class.site-header--scrolled]="isScrolled()">
-  <nav class="site-nav" aria-label="Primary navigation">
+<header class="layout-topbar" [class.layout-topbar-sticky]="isScrolled()">
+  <div class="layout-topbar-inner">
     <a routerLink="/" class="brand" aria-label="Theme Studio home">
-      <span class="brand-mark" aria-hidden="true"><i class="pi pi-prime"></i></span>
-      <span>Theme Studio</span>
+      <img ngSrc="/favicon.svg" width="28" height="28" priority alt="" />
+      <span class="brand-full">THEME STUDIO</span>
     </a>
 
-    <div class="nav-links" aria-label="Page sections">
-      <a href="#preview">Live preview</a>
-      <a href="#studio">Token system</a>
-      <a href="#workflow">Workflow</a>
-    </div>
-
-    <div class="nav-actions">
-      <a routerLink="/designer" class="nav-designer">Open Designer</a>
-      <app-theme-switcher />
-      <a routerLink="/changelog" class="icon-link" aria-label="View changelog">
-        <i class="pi pi-list" aria-hidden="true"></i>
-      </a>
-      <a
-        href="https://github.com/mkccl/prime-ng-theme-fe"
-        target="_blank"
-        rel="noopener"
-        class="icon-link"
-        aria-label="View Theme Studio on GitHub (opens in a new tab)"
-      >
+    <nav class="topbar-actions" aria-label="Utility navigation">
+      <button type="button" class="topbar-control search-control" aria-label="Search" (click)="searchOpen.set(true)">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+      <a class="topbar-control" href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener" aria-label="GitHub">
         <i class="pi pi-github" aria-hidden="true"></i>
       </a>
-    </div>
-  </nav>
+      <a class="topbar-control changelog-control" routerLink="/changelog" aria-label="Changelog">
+        <i class="pi pi-list" aria-hidden="true"></i>
+      </a>
+      <button type="button" class="topbar-control" [attr.aria-label]="themeState.isDark() ? 'Use light mode' : 'Use dark mode'" (click)="themeState.toggleDark()">
+        <i [class]="themeState.isDark() ? 'pi pi-sun' : 'pi pi-moon'" aria-hidden="true"></i>
+      </button>
+      <app-theme-switcher />
+    </nav>
+  </div>
 </header>
 
-<main id="main-content">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy fade-up" style="--delay: 0s">
-      <span class="eyebrow"><i class="pi pi-sparkles" aria-hidden="true"></i> PrimeNG Theme Studio</span>
-      <h1 id="hero-title">Design the system.<br /><em>See the product.</em></h1>
-      <p class="hero-lede">
-        Shape PrimeNG from primitive palettes to component tokens, then experience every decision in
-        a real application before you export a single line of code.
-      </p>
-      <div class="hero-actions">
-        <a routerLink="/designer" class="button-link button-link--primary">
-          Start designing <i class="pi pi-arrow-right" aria-hidden="true"></i>
-        </a>
-        <a
-          href="https://github.com/mkccl/prime-ng-theme-fe"
-          target="_blank"
-          rel="noopener"
-          class="button-link button-link--secondary"
-        >
-          <i class="pi pi-github" aria-hidden="true"></i>
-          Explore the source
-          <span class="sr-only">(opens in a new tab)</span>
-        </a>
-      </div>
-      <p class="hero-note"><i class="pi pi-check-circle" aria-hidden="true"></i> No account. No lock-in. Export when it feels right.</p>
-    </div>
+<div class="landing-page">
+  <aside class="landing-announcement" aria-label="Project announcement">
+    <span>Theme Studio is an open-source visual theme designer for PrimeNG, built for teams shipping production Angular applications.</span>
+    <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">Explore the source <i class="pi pi-arrow-up-right" aria-hidden="true"></i></a>
+    <span class="announcement-version"><i class="pi pi-bolt" aria-hidden="true"></i> Built for Angular v21+</span>
+  </aside>
 
-    <div id="preview" class="hero-preview fade-up" style="--delay: 0.12s">
-      <div class="preview-accent" aria-hidden="true"></div>
-      <div class="preview-label">
-        <span><i class="pi pi-circle-fill" aria-hidden="true"></i> Interactive preview</span>
-        <small>Try the palette, tabs, chart, table, and dialog</small>
+  <main id="main-content">
+    <section class="landing-hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">The Visual Theme Studio for PrimeNG</h1>
+        <p>
+          Enhance your PrimeNG applications with Theme Studio's complete visual workspace of
+          customizable, feature-rich UI components. Turn your design system into production-ready
+          Angular code with clarity.
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/designer" class="linkbox linkbox-primary">Open Designer <i class="pi pi-arrow-right" aria-hidden="true"></i></a>
+          <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener" class="linkbox linkbox-secondary">
+            <i class="pi pi-github" aria-hidden="true"></i> Give a Star
+          </a>
+        </div>
       </div>
-      @defer (on viewport; prefetch on idle) {
+
+      <div class="sample-selector" role="group" aria-label="Choose a mobile sample">
+        @for (sample of sampleOptions; track sample.title) {
+          <button
+            type="button"
+            [class.active]="activeSample() === sample.title"
+            [attr.aria-pressed]="activeSample() === sample.title"
+            [attr.aria-label]="sample.title"
+            (click)="selectSample(sample.title)"
+          >
+            <i [class]="sample.icon" aria-hidden="true"></i>
+          </button>
+        }
+      </div>
+
+      <div class="mobile-sample box">
+        <img [ngSrc]="sampleImagePath()" width="850" height="1417" [alt]="activeSample() + ' dashboard sample'" />
+      </div>
+
+      <div class="desktop-sample">
         <app-live-dashboard />
-      } @placeholder {
-        <div class="dashboard-placeholder" aria-label="Loading interactive dashboard preview">
-          <div class="placeholder-bar"></div>
-          <div class="placeholder-layout">
-            <div class="placeholder-rail"></div>
-            <div class="placeholder-content">
-              <div class="placeholder-heading"></div>
-              <div class="placeholder-kpis">
-                @for (_ of [1, 2, 3, 4]; track $index) {
-                  <span></span>
-                }
-              </div>
-              <div class="placeholder-chart"></div>
-            </div>
-          </div>
-        </div>
-      }
-    </div>
-  </section>
-
-  <section class="proof-rail" aria-label="Theme Studio facts">
-    @for (proof of proofPoints; track proof.label) {
-      <div class="proof-item">
-        <strong>{{ proof.value }}</strong>
-        <span>{{ proof.label }}</span>
       </div>
-    }
-  </section>
+    </section>
 
-  <section id="studio" class="studio-story" aria-labelledby="studio-title">
-    <div class="studio-copy fade-up" style="--delay: 0.05s">
-      <span class="section-kicker">The system behind the screen</span>
-      <h2 id="studio-title">Move from color choices to component behavior.</h2>
-      <p>
-        Great themes are not collections of hex values. Theme Studio connects each primitive to a
-        semantic role, then carries that intent into every PrimeNG component.
-      </p>
-      <dl class="studio-details">
-        <div>
-          <dt>Primitive</dt>
-          <dd>Build a dependable palette foundation.</dd>
-        </div>
-        <div>
-          <dt>Semantic</dt>
-          <dd>Describe intent across light and dark modes.</dd>
-        </div>
-        <div>
-          <dt>Component</dt>
-          <dd>Refine the moments that make a product feel yours.</dd>
-        </div>
-      </dl>
-      <a routerLink="/designer" class="text-link">Explore the token editor <i class="pi pi-arrow-right" aria-hidden="true"></i></a>
+    <section class="landing-section features-section" aria-labelledby="features-title">
+      <header class="section-heading">
+        <h2 id="features-title">Features</h2>
+        <p>Everything you need to shape, validate, and export a consistent PrimeNG design system.</p>
+      </header>
+
+      <div class="feature-grid">
+        @for (feature of features; track feature.title) {
+          <article class="feature-card box">
+            <img [ngSrc]="feature.icon" width="144" height="128" alt="" />
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section id="components" class="landing-section components-section" aria-labelledby="components-title">
+      <header class="section-heading">
+        <h2 id="components-title">Live Preview</h2>
+        <p>See the active theme applied to a real, interactive PrimeNG data experience.</p>
+      </header>
+      <app-customer-showcase />
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <div class="footer-links">
+      <div>
+        <strong>Theme Studio</strong>
+        <a routerLink="/designer">Designer</a>
+        <a routerLink="/changelog">Changelog</a>
+      </div>
+      <div>
+        <strong>Resources</strong>
+        <a href="https://primeng.org" target="_blank" rel="noopener">PrimeNG</a>
+        <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div>
+        <strong>Community</strong>
+        <a href="https://github.com/mkccl/prime-ng-theme-fe/issues" target="_blank" rel="noopener">Issues</a>
+        <a href="https://github.com/mkccl/prime-ng-theme-fe/discussions" target="_blank" rel="noopener">Discussions</a>
+      </div>
+      <div>
+        <strong>Related</strong>
+        <a href="https://optimus.openng.org" target="_blank" rel="noopener">Optimus UI</a>
+        <a href="https://openng.org" target="_blank" rel="noopener">OpenNG</a>
+      </div>
     </div>
 
-    <div class="studio-preview fade-up" style="--delay: 0.12s">
-      <app-designer-preview-card />
-    </div>
-  </section>
-
-  <app-how-it-works />
-
-  <section class="capabilities" aria-labelledby="capabilities-title">
-    <div class="capabilities-heading">
-      <span class="section-kicker">Built for real product teams</span>
-      <h2 id="capabilities-title">A theme workflow that stays coherent from idea to release.</h2>
-    </div>
-
-    <div class="capability-list">
-      @for (capability of capabilities; track capability.number) {
-        <article class="capability fade-up" [style.--delay]="$index * 0.06 + 's'">
-          <span class="capability-number">{{ capability.number }}</span>
-          <span class="capability-icon" aria-hidden="true"><i [class]="capability.icon"></i></span>
-          <div>
-            <h3>{{ capability.title }}</h3>
-            <p>{{ capability.description }}</p>
-          </div>
-        </article>
-      }
-    </div>
-  </section>
-
-  <section class="final-cta" aria-labelledby="cta-title">
-    <div class="cta-copy">
-      <span class="section-kicker">Your system, ready to ship</span>
-      <h2 id="cta-title">Build your PrimeNG theme once. Let the whole product follow.</h2>
-      <p>Start from a proven preset, make every token intentional, and export code your team can own.</p>
-    </div>
-    <div class="cta-actions">
-      <a routerLink="/designer" class="button-link button-link--primary">
-        Open the Designer <i class="pi pi-arrow-right" aria-hidden="true"></i>
-      </a>
-      <a
-        href="https://github.com/mkccl/prime-ng-theme-fe"
-        target="_blank"
-        rel="noopener"
-        class="button-link button-link--secondary"
-      >
-        <i class="pi pi-github" aria-hidden="true"></i> GitHub
-        <span class="sr-only">(opens in a new tab)</span>
-      </a>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="footer-brand">
-    <span class="brand-mark" aria-hidden="true"><i class="pi pi-prime"></i></span>
-    <div>
-      <strong>Theme Studio</strong>
+    <div class="footer-bottom">
+      <a routerLink="/" class="footer-brand" aria-label="Theme Studio home"><img ngSrc="/favicon.svg" width="28" height="28" alt="" /><strong>THEME STUDIO</strong></a>
       <span>Open-source visual theming for PrimeNG.</span>
+      <div class="footer-socials">
+        <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener" aria-label="GitHub"><i class="pi pi-github" aria-hidden="true"></i></a>
+        <a href="https://primeng.org" target="_blank" rel="noopener" aria-label="PrimeNG"><i class="pi pi-prime" aria-hidden="true"></i></a>
+      </div>
     </div>
-  </div>
+  </footer>
+</div>
 
-  <div class="footer-links">
-    <div>
-      <strong>Product</strong>
-      <a routerLink="/designer">Designer</a>
-      <a routerLink="/changelog">Changelog</a>
-    </div>
-    <div>
-      <strong>Resources</strong>
-      <a href="https://primeng.org" target="_blank" rel="noopener">PrimeNG</a>
-      <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener">GitHub</a>
-    </div>
+@if (searchOpen()) {
+  <div class="search-backdrop" role="presentation" (click)="searchOpen.set(false)">
+    <section class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-title" (click)="$event.stopPropagation()">
+      <header>
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <label id="search-title" for="site-search" class="sr-only">Search Theme Studio</label>
+        <input id="site-search" type="search" placeholder="Search documentation" autofocus />
+        <button type="button" aria-label="Close search" (click)="searchOpen.set(false)">ESC</button>
+      </header>
+      <div class="search-empty">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <strong>Search Theme Studio</strong>
+        <span>Find the designer, components, themes, and project resources.</span>
+      </div>
+    </section>
   </div>
-
-  <div class="footer-meta">
-    <span>Made by ccl with <i class="pi pi-heart-fill" aria-hidden="true"></i></span>
-    <span>© 2026 Theme Studio</span>
-  </div>
-</footer>
+}

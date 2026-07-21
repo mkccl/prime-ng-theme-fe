@@ -1,213 +1,75 @@
-<p-toast key="dashboard" position="top-right" />
-
-<div class="dashboard-shell" aria-label="Interactive PrimeNG theme preview">
-  <div class="dashboard-titlebar" aria-hidden="true">
-    <span class="window-dot window-dot--red"></span>
-    <span class="window-dot window-dot--amber"></span>
-    <span class="window-dot window-dot--green"></span>
-    <span class="dashboard-title">theme-studio / live-preview</span>
-    <span class="live-status"><i class="pi pi-circle-fill"></i> Live theme</span>
-  </div>
-
-  <div class="dashboard-layout">
-    <aside class="dashboard-rail" aria-label="Preview navigation">
-      <div class="rail-mark" aria-hidden="true"><i class="pi pi-prime"></i></div>
-      <nav class="rail-nav" aria-label="Dashboard sections">
-        <button type="button" class="rail-action rail-action--active" aria-label="Overview">
-          <i class="pi pi-home"></i>
+<div class="overview-app" aria-label="Interactive finance dashboard sample">
+  <aside class="overview-sidebar" aria-label="Finance dashboard navigation">
+    <div class="overview-logo"><i class="pi pi-prime" aria-hidden="true"></i></div>
+    <nav>
+      @for (item of ['Overview', 'Chat', 'Inbox', 'Applications', 'Customers', 'Media']; track item; let i = $index) {
+        <button type="button" [class.active]="activeNav() === item" [attr.aria-label]="item" (click)="activeNav.set(item)">
+          <i [class]="['pi pi-home', 'pi pi-comment', 'pi pi-inbox', 'pi pi-th-large', 'pi pi-user', 'pi pi-video'][i]" aria-hidden="true"></i>
         </button>
-        <button type="button" class="rail-action" aria-label="Component library">
-          <i class="pi pi-th-large"></i>
-        </button>
-        <button type="button" class="rail-action" aria-label="Theme analytics">
-          <i class="pi pi-chart-bar"></i>
-        </button>
-        <button type="button" class="rail-action" aria-label="Theme settings">
-          <i class="pi pi-sliders-h"></i>
-        </button>
-      </nav>
-      <p-avatar label="TS" shape="circle" size="normal" ariaLabel="Theme Studio workspace" />
-    </aside>
+      }
+    </nav>
+  </aside>
 
-    <div class="dashboard-content">
-      <header class="dashboard-header">
-        <div>
-          <span class="dashboard-eyebrow">Workspace</span>
-          <h2>Component coverage</h2>
-          <p>One token system, reflected across the product.</p>
-        </div>
+  <section class="overview-main">
+    <header class="overview-header">
+      <div>
+        <span>Overview</span>
+        <h2>Welcome to Theme Studio</h2>
+      </div>
+      <div class="overview-tools">
+        <label class="overview-search">
+          <span class="sr-only">Search dashboard</span>
+          <i class="pi pi-search" aria-hidden="true"></i>
+          <input type="search" placeholder="Search" />
+        </label>
+        <button type="button" class="icon-button" aria-label="Notifications"><i class="pi pi-bell" aria-hidden="true"></i><span></span></button>
+      </div>
+    </header>
 
-        <div class="dashboard-theme-tools" aria-label="Quick theme controls">
-          <div class="quick-swatches" role="group" aria-label="Choose a primary color">
-            @for (color of quickColors; track color.name) {
-              <button
-                type="button"
-                class="quick-swatch"
-                [class.quick-swatch--active]="themeState.selectedPrimary() === color.name"
-                [style.backgroundColor]="color.color"
-                [attr.aria-label]="'Use ' + color.name + ' as the primary color'"
-                [attr.aria-pressed]="themeState.selectedPrimary() === color.name"
-                (click)="themeState.setPrimary(color.name)"
-              ></button>
-            }
-          </div>
-          <p-button
-            [icon]="themeState.isDark() ? 'pi pi-sun' : 'pi pi-moon'"
-            severity="secondary"
-            variant="text"
-            [rounded]="true"
-            [ariaLabel]="themeState.isDark() ? 'Use light mode' : 'Use dark mode'"
-            (onClick)="themeState.toggleDark()"
-          />
-        </div>
-      </header>
-
-      <div class="kpi-grid" aria-label="Theme coverage summary">
-        @for (kpi of kpis; track kpi.label) {
-          <article class="kpi-card">
-            <span class="kpi-label">{{ kpi.label }}</span>
-            <strong>{{ kpi.value }}</strong>
-            <span class="kpi-change" [class.kpi-change--up]="kpi.trend === 'up'">
-              <i [class]="kpi.trend === 'up' ? 'pi pi-arrow-up-right' : 'pi pi-check'"></i>
-              {{ kpi.change }}
-            </span>
-          </article>
+    <div class="overview-toolbar">
+      <div class="period-control" role="group" aria-label="Chart period">
+        @for (option of ['Weekly', 'Monthly', 'Yearly']; track option) {
+          <button type="button" [class.active]="period() === option" (click)="setPeriod($any(option))">{{ option }}</button>
         }
       </div>
-
-      <p-tabs value="overview" class="dashboard-tabs">
-        <p-tablist>
-          <p-tab value="overview">Overview</p-tab>
-          <p-tab value="audit">Component audit</p-tab>
-        </p-tablist>
-
-        <p-tabpanels>
-          <p-tabpanel value="overview">
-            <section class="coverage-panel" aria-labelledby="coverage-title">
-              <div class="coverage-toolbar">
-                <div>
-                  <span class="panel-kicker">Theme adoption</span>
-                  <h3 id="coverage-title">Preview coverage</h3>
-                </div>
-                <div class="coverage-actions">
-                  <label class="sr-only" for="coverage-range">Coverage range</label>
-                  <p-select
-                    inputId="coverage-range"
-                    [options]="rangeOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    [ngModel]="selectedRange()"
-                    (ngModelChange)="setRange($event)"
-                    size="small"
-                  />
-                  <p-button
-                    label="View data"
-                    icon="pi pi-table"
-                    severity="secondary"
-                    variant="outlined"
-                    size="small"
-                    (onClick)="openDataDialog()"
-                  />
-                  <p-button
-                    icon="pi pi-download"
-                    severity="secondary"
-                    variant="text"
-                    [rounded]="true"
-                    size="small"
-                    ariaLabel="Export themed preview snapshot"
-                    (onClick)="exportSnapshot()"
-                  />
-                </div>
-              </div>
-
-              <figure class="coverage-chart">
-                <p-chart type="line" [data]="chartData()" [options]="chartOptions()" />
-                <figcaption>
-                  Percentage of audited PrimeNG components covered by the current token system.
-                </figcaption>
-              </figure>
-            </section>
-          </p-tabpanel>
-
-          <p-tabpanel value="audit">
-            <section class="audit-panel" aria-labelledby="audit-title">
-              <div class="audit-heading">
-                <div>
-                  <span class="panel-kicker">Component system</span>
-                  <h3 id="audit-title">Token audit</h3>
-                </div>
-                <p-tag value="5 checked" severity="success" icon="pi pi-check-circle" />
-              </div>
-
-              <div class="audit-table-wrap">
-                <p-table
-                  [value]="auditRows"
-                  [stripedRows]="true"
-                  [tableStyle]="{ 'min-width': '36rem' }"
-                  size="small"
-                >
-                  <ng-template #header>
-                    <tr>
-                      <th pSortableColumn="component">
-                        Component <p-sortIcon field="component" />
-                      </th>
-                      <th>Token layer</th>
-                      <th>Status</th>
-                      <th>Updated</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template #body let-row>
-                    <tr>
-                      <td>
-                        <span class="component-name"><i [class]="row.icon"></i>{{ row.component }}</span>
-                      </td>
-                      <td>{{ row.layer }}</td>
-                      <td>
-                        <p-tag [value]="row.status" [severity]="getStatusSeverity(row.status)" />
-                      </td>
-                      <td>{{ row.updated }}</td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </div>
-            </section>
-          </p-tabpanel>
-        </p-tabpanels>
-      </p-tabs>
+      <div class="overview-actions">
+        <button type="button" class="download-button">Download <i class="pi pi-download" aria-hidden="true"></i></button>
+        <button type="button" class="date-button">06/11/2024 - 06/22/2024 <i class="pi pi-calendar" aria-hidden="true"></i></button>
+      </div>
     </div>
-  </div>
-</div>
 
-<p-dialog
-  header="Preview coverage data"
-  [visible]="dataDialogVisible()"
-  (visibleChange)="dataDialogVisible.set($event)"
-  [modal]="true"
-  [style]="{ width: 'min(32rem, calc(100vw - 2rem))' }"
->
-  <p class="dialog-intro">The chart values are also available as structured data.</p>
-  <div class="dialog-table-wrap">
-    <table class="dialog-table">
-      <caption class="sr-only">
-        Preview coverage by date
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Coverage</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (label of currentSeries.labels; track label; let index = $index) {
-          <tr>
-            <td>{{ label }}</td>
-            <td>{{ currentSeries.values[index] }}%</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-  <ng-template #footer>
-    <p-button label="Close" (onClick)="closeDataDialog()" />
-  </ng-template>
-</p-dialog>
+    <section class="chart-card panel">
+      <header>
+        <h3>Crypto Analytics</h3>
+        <div class="chart-legend">
+          <span><i class="personal-dot"></i> Personal Wallet</span>
+          <span><i class="corporate-dot"></i> Corporate Wallet</span>
+          <span><i class="investment-dot"></i> Investment Wallet</span>
+        </div>
+      </header>
+      <div class="chart-wrap"><p-chart type="bar" [data]="chartData()" [options]="chartOptions()" /></div>
+    </section>
+
+    <div class="overview-grid">
+      <section class="transactions panel">
+        <header><div><h3>Recent transactions</h3><p>Your latest account activity</p></div><button type="button">View all <i class="pi pi-arrow-right"></i></button></header>
+        <div class="transaction-list">
+          @for (transaction of transactions; track transaction.label) {
+            <div class="transaction-row">
+              <span class="transaction-icon"><i [class]="transaction.icon"></i></span>
+              <span class="transaction-name"><strong>{{ transaction.label }}</strong><small>{{ transaction.date }}</small></span>
+              <strong [class.positive]="transaction.kind === 'income'">{{ transaction.amount }}</strong>
+            </div>
+          }
+        </div>
+      </section>
+
+      <aside class="wallet-card panel">
+        <header><h3>My wallet</h3><button type="button" aria-label="More wallet options"><i class="pi pi-ellipsis-h"></i></button></header>
+        <div class="credit-card">
+          <span>Theme Studio</span><strong>•••• 4908</strong><small>Alex Morgan <b>07/29</b></small>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>

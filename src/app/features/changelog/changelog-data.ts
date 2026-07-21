@@ -7,6 +7,37 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.0',
+    date: '2026-07-22',
+    title: 'Optimus-Style Landing Page & Designer Validation',
+    changes: [
+      {
+        type: 'added',
+        text: 'Source-faithful Optimus-style landing page with responsive navigation, announcement, product dashboard, feature cards, and footer',
+      },
+      {
+        type: 'added',
+        text: 'Interactive live preview with analytics periods, responsive sample switching, and light or dark theme support',
+      },
+      {
+        type: 'added',
+        text: 'Searchable, sortable, selectable, and paginated customer data preview using PrimeNG',
+      },
+      {
+        type: 'changed',
+        text: 'Feature messaging now focuses on the actual Design Editor, Accessibility, Responsive Preview, and Typed Theme Export capabilities',
+      },
+      {
+        type: 'changed',
+        text: 'Component showcase is now presented as a Live Preview instead of a standalone component library',
+      },
+      {
+        type: 'fixed',
+        text: 'Verified theme creation, token editing, real-time preview updates, applying themes, URL sharing, import, and TypeScript export against the current Angular and PrimeNG releases',
+      },
+    ],
+  },
+  {
     version: '1.4.0',
     date: '2026-07-19',
     title: 'Interactive Landing Page & Dependency Refresh',

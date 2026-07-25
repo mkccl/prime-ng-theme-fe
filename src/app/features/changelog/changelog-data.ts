@@ -7,6 +7,37 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.6.0',
+    date: '2026-07-25',
+    title: 'Starter Themes & Live Designer Preview',
+    changes: [
+      {
+        type: 'added',
+        text: 'Ready-to-customize shadcn, Bootstrap, and Material starter themes with matching colors, typography, spacing, and component styles',
+      },
+      {
+        type: 'added',
+        text: 'Responsive starter theme gallery with visual previews and direct links into the designer',
+      },
+      {
+        type: 'added',
+        text: 'Live component preview while choosing a starter theme, including its font family and type scale',
+      },
+      {
+        type: 'added',
+        text: 'Live GitHub star count in the landing page repository action',
+      },
+      {
+        type: 'changed',
+        text: 'Theme creation now uses a clearer foundation-first flow while keeping existing theme imports available',
+      },
+      {
+        type: 'fixed',
+        text: 'shadcn starter theme table headers and filters now keep the correct dark surface in dark mode',
+      },
+    ],
+  },
+  {
     version: '1.5.0',
     date: '2026-07-22',
     title: 'Optimus-Style Landing Page & Designer Validation',

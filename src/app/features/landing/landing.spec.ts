@@ -41,6 +41,36 @@ describe('Landing', () => {
     expect(el.querySelector('app-customer-showcase')).toBeTruthy();
   });
 
+  it('shows the repository star count in the GitHub CTA', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    const component = fixture.componentInstance as unknown as {
+      githubStars: { set(value: number): void };
+    };
+    component.githubStars.set(42);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const starCount = fixture.nativeElement.querySelector('.github-star-count') as HTMLElement;
+
+    expect(starCount.textContent).toContain('42');
+    expect(starCount.getAttribute('aria-label')).toBe('42 GitHub stars');
+  });
+
+  it('offers three starter themes and a custom theme entry', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    const cards = el.querySelectorAll('.starter-card');
+
+    expect(cards.length).toBe(4);
+    expect(cards[0].textContent).toContain('shadcn');
+    expect(cards[1].textContent).toContain('Bootstrap');
+    expect(cards[2].textContent).toContain('Material');
+    expect(cards[3].textContent).toContain('Create your own');
+    expect(cards[0].querySelector('a')?.getAttribute('href')).toContain('starter=shadcn');
+    expect(cards[3].querySelector('a')?.getAttribute('href')).toBe('/designer');
+  });
+
   it('exposes six interactive mobile sample options', async () => {
     const fixture = TestBed.createComponent(Landing);
     fixture.detectChanges();

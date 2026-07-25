@@ -47,6 +47,13 @@
           <a routerLink="/designer" class="linkbox linkbox-primary">Open Designer <i class="pi pi-arrow-right" aria-hidden="true"></i></a>
           <a href="https://github.com/mkccl/prime-ng-theme-fe" target="_blank" rel="noopener" class="linkbox linkbox-secondary">
             <i class="pi pi-github" aria-hidden="true"></i> Give a Star
+            @let starCount = githubStars();
+            @if (starCount !== null) {
+              <span class="github-star-count" [attr.aria-label]="starCount + ' GitHub stars'">
+                <i class="pi pi-star-fill" aria-hidden="true"></i>
+                {{ starCount }}
+              </span>
+            }
           </a>
         </div>
       </div>
@@ -71,6 +78,102 @@
 
       <div class="desktop-sample">
         <app-live-dashboard />
+      </div>
+    </section>
+
+    <section id="themes" class="landing-section starters-section" aria-labelledby="starters-title">
+      <header class="section-heading">
+        <span class="section-kicker">Choose a starting point</span>
+        <h2 id="starters-title">Start familiar. Make it yours.</h2>
+        <p>
+          Begin with a visual language your team already knows, then customize every token in the
+          designer.
+        </p>
+      </header>
+
+      <div class="starter-grid">
+        @for (theme of starterThemes; track theme.id) {
+          <article
+            class="starter-card"
+            [style.--starter-accent]="theme.accent"
+            [style.--starter-soft]="theme.accentSoft"
+            [style.--starter-surface]="theme.surface"
+            [style.--starter-radius]="theme.radius"
+          >
+            <div class="starter-card-preview" aria-hidden="true">
+              <div class="starter-preview-topbar">
+                <span></span>
+                <i></i>
+                <i></i>
+              </div>
+              <div class="starter-preview-body">
+                <div class="starter-preview-sidebar">
+                  <span class="active"></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="starter-preview-content">
+                  <div class="starter-preview-title"></div>
+                  <div class="starter-preview-subtitle"></div>
+                  <div class="starter-preview-metrics">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div class="starter-preview-chart">
+                    <i></i><i></i><i></i><i></i><i></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="starter-card-copy">
+              <div>
+                <span class="starter-best-for">{{ theme.bestFor }}</span>
+                <h3>{{ theme.name }}</h3>
+              </div>
+              <p>{{ theme.description }}</p>
+              <a
+                routerLink="/designer"
+                [queryParams]="{ starter: theme.id }"
+                [attr.aria-label]="'Use ' + theme.name + ' as a starter theme'"
+              >
+                Use this theme <i class="pi pi-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </article>
+        }
+
+        <article
+          class="starter-card starter-card-custom"
+          style="
+            --starter-accent: var(--p-primary-color);
+            --starter-soft: var(--p-primary-50);
+            --starter-surface: var(--p-content-background);
+            --starter-radius: 0.75rem;
+          "
+        >
+          <div class="starter-card-preview starter-custom-preview" aria-hidden="true">
+            <div class="custom-preview-canvas">
+              <span class="custom-preview-plus"><i class="pi pi-plus"></i></span>
+              <span class="custom-preview-swatch custom-preview-swatch-one"></span>
+              <span class="custom-preview-swatch custom-preview-swatch-two"></span>
+              <span class="custom-preview-swatch custom-preview-swatch-three"></span>
+              <span class="custom-preview-line"></span>
+            </div>
+          </div>
+
+          <div class="starter-card-copy">
+            <div>
+              <span class="starter-best-for">Your design system</span>
+              <h3>Create your own</h3>
+            </div>
+            <p>Start with the full token workspace and shape a completely custom PrimeNG theme.</p>
+            <a routerLink="/designer" aria-label="Create your own theme">
+              Start from scratch <i class="pi pi-arrow-right" aria-hidden="true"></i>
+            </a>
+          </div>
+        </article>
       </div>
     </section>
 

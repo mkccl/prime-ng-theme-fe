@@ -59,17 +59,21 @@
       </aside>
     </ng-template>
     <ng-template #panel>
-      <main class="designer-preview">
-        @if (activeView() === 'editor') {
-          <app-grid />
-        } @else {
-          <div class="flex items-center justify-center h-full text-[var(--p-text-muted-color)]">
-            <div class="text-center">
-              <i class="pi pi-palette text-6xl mb-4 block"></i>
-              <p class="text-xl">Create a theme to see the preview</p>
+      <main
+        class="designer-preview"
+        [style.--preview-font-family]="previewFontFamily()"
+        [style.--preview-font-size]="previewFontSize()"
+      >
+        @if (activeView() === 'create') {
+          <div class="designer-preview-context" aria-live="polite">
+            <div>
+              <span>Live starter preview</span>
+              <strong>{{ previewThemeName() }} components</strong>
             </div>
+            <p><i class="pi pi-bolt" aria-hidden="true"></i> Updates as you choose</p>
           </div>
         }
+        <app-grid />
       </main>
     </ng-template>
   </p-splitter>

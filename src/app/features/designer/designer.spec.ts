@@ -51,9 +51,11 @@ describe('Designer', () => {
     expect(backBtn).toBeNull();
   });
 
-  it('should show placeholder text in preview area during create view', () => {
-    const placeholder = el.querySelector('.pi-palette');
-    expect(placeholder).toBeTruthy();
+  it('should show a labeled live component preview during create view', () => {
+    const context = el.querySelector('.designer-preview-context');
+    expect(context?.textContent).toContain('Live starter preview');
+    expect(context?.textContent).toContain('Custom components');
+    expect(el.querySelector('app-grid')).toBeTruthy();
   });
 
   it('should import theme from query param on init', async () => {

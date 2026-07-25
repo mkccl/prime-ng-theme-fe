@@ -15,6 +15,7 @@ import { CustomerShowcase } from './components/customer-showcase';
 import { LiveDashboard } from './components/live-dashboard';
 import { ThemeSwitcher } from './components/theme-switcher';
 import { ThemeStateService } from './services/theme-state.service';
+import { STARTER_THEMES } from '../../starter-themes';
 
 interface FeatureItem {
   icon: string;
@@ -25,6 +26,10 @@ interface FeatureItem {
 interface SampleOption {
   icon: string;
   title: string;
+}
+
+interface GitHubRepository {
+  stargazers_count?: unknown;
 }
 
 @Component({
@@ -47,9 +52,11 @@ export class Landing {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly themeState = inject(ThemeStateService);
+  protected readonly starterThemes = STARTER_THEMES;
   protected readonly isScrolled = signal(false);
   protected readonly searchOpen = signal(false);
   protected readonly activeSample = signal('Overview');
+  protected readonly githubStars = signal<number | null>(null);
   protected readonly sampleImagePath = computed(() => {
     const sample = this.activeSample() === 'Inbox' ? 'chat' : this.activeSample().toLowerCase();
     return `/landing/${sample}.jpg`;
@@ -96,6 +103,7 @@ export class Landing {
       const windowRef = this.document.defaultView;
       if (!windowRef) return;
 
+      const abortController = new AbortController();
       const onScroll = () => this.isScrolled.set(windowRef.scrollY > 0);
       const onKeydown = (event: KeyboardEvent) => {
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -111,7 +119,9 @@ export class Landing {
       onScroll();
       windowRef.addEventListener('scroll', onScroll, { passive: true });
       windowRef.addEventListener('keydown', onKeydown);
+      this.loadGitHubStars(windowRef, abortController.signal);
       this.destroyRef.onDestroy(() => {
+        abortController.abort();
         windowRef.removeEventListener('scroll', onScroll);
         windowRef.removeEventListener('keydown', onKeydown);
       });
@@ -120,5 +130,31 @@ export class Landing {
 
   protected selectSample(title: string): void {
     this.activeSample.set(title);
+  }
+
+  private async loadGitHubStars(windowRef: Window, signal: AbortSignal): Promise<void> {
+    if (!windowRef.fetch) return;
+
+    try {
+      const response = await windowRef.fetch(
+        'https://api.github.com/repos/mkccl/prime-ng-theme-fe',
+        {
+          headers: { Accept: 'application/vnd.github+json' },
+          signal,
+        },
+      );
+      if (!response.ok) return;
+
+      const repository = (await response.json()) as GitHubRepository;
+      if (
+        typeof repository.stargazers_count === 'number' &&
+        Number.isSafeInteger(repository.stargazers_count) &&
+        repository.stargazers_count >= 0
+      ) {
+        this.githubStars.set(repository.stargazers_count);
+      }
+    } catch {
+      // The star count is an enhancement; keep the GitHub CTA usable if the request fails.
+    }
   }
 }

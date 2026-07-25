@@ -15,6 +15,7 @@ import { CreateTheme } from './components/create-theme';
 import { DesignEditor } from './components/editor';
 import { EditorFooter } from './components/editor-footer';
 import { Grid } from './blocks/grid/grid';
+import { getStarterTheme } from '../../starter-themes';
 
 @Component({
   selector: 'app-designer',
@@ -28,6 +29,9 @@ export class Designer implements OnInit {
   private readonly route = inject(ActivatedRoute);
   protected readonly designerService = inject(ThemeDesignerService);
   protected readonly activeView = computed(() => this.designerService.designer().activeView);
+  protected readonly previewThemeName = this.designerService.previewThemeName;
+  protected readonly previewFontFamily = this.designerService.previewFontFamily;
+  protected readonly previewFontSize = this.designerService.previewFontSize;
   protected readonly themeName = computed(
     () => this.designerService.designer().theme?.name ?? 'Theme Designer',
   );
@@ -43,6 +47,15 @@ export class Designer implements OnInit {
         .then((ok) => {
           if (!ok) this.designerService.importTheme(themeParam);
         });
+      return;
+    }
+
+    const starter = getStarterTheme(this.route.snapshot.queryParamMap.get('starter'));
+    if (starter) {
+      this.designerService.createThemeFromPreset(`${starter.name} Custom`, starter.preset, {
+        fontFamily: starter.fontFamily,
+        fontSize: starter.fontSize,
+      });
     }
   }
 

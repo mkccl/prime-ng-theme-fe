@@ -28,6 +28,7 @@ export interface DesignerState {
 }
 
 const FONT_LIST = [
+  'system-ui',
   'Inter var',
   'Archivo',
   'Assistant',
@@ -57,11 +58,25 @@ const FONT_LIST = [
 ];
 
 const FONT_SIZES = ['12px', '13px', '14px', '15px', '16px', '17px', '18px', '19px', '20px'];
+const STUDIO_FONT_SIZE = '14px';
+
+function resolveFontStack(fontFamily: string): string {
+  if (fontFamily === 'system-ui') {
+    return 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  }
+  if (fontFamily === 'Inter var') {
+    return '"Inter var", sans-serif';
+  }
+  return `"${fontFamily}", "Helvetica Neue", Arial, sans-serif`;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ThemeDesignerService {
   readonly fonts = FONT_LIST;
   readonly fontSizes = FONT_SIZES;
+  readonly previewThemeName = signal('Custom');
+  readonly previewFontFamily = signal(resolveFontStack('Inter var'));
+  readonly previewFontSize = signal(STUDIO_FONT_SIZE);
 
   readonly designer = signal<DesignerState>({
     activeView: 'create',
@@ -180,14 +195,19 @@ export class ThemeDesignerService {
     }
   }
 
-  createThemeFromPreset(name: string, preset: any): void {
+  createThemeFromPreset(name: string, preset: any, config?: Partial<ThemeConfig>): void {
     const cloned = structuredClone(preset);
+    const themeConfig: ThemeConfig = {
+      fontSize: '14px',
+      fontFamily: 'Inter var',
+      ...config,
+    };
     this.designer.update((prev) => ({
       ...prev,
       theme: {
         name,
         preset: cloned,
-        config: { fontSize: '14px', fontFamily: 'Inter var' },
+        config: themeConfig,
       },
       activeView: 'editor',
       activeTab: 0,
@@ -196,7 +216,22 @@ export class ThemeDesignerService {
 
     usePreset(cloned);
     this.refreshACTokens();
-    document.documentElement.style.fontSize = '14px';
+    document.documentElement.style.fontSize = themeConfig.fontSize;
+    void this.applyFont(themeConfig.fontFamily);
+  }
+
+  previewThemeFromPreset(name: string, preset: any, config: ThemeConfig): void {
+    this.previewThemeName.set(name);
+    this.previewFontFamily.set(resolveFontStack(config.fontFamily));
+    this.previewFontSize.set(config.fontSize);
+    usePreset(preset);
+    document.documentElement.style.fontSize = STUDIO_FONT_SIZE;
+
+    if (config.fontFamily !== 'system-ui' && config.fontFamily !== 'Inter var') {
+      for (const weight of [400, 500, 600, 700]) {
+        void this.loadFont(config.fontFamily, weight, false);
+      }
+    }
   }
 
   openCreateTheme(): void {
@@ -230,17 +265,20 @@ export default ${presetJson} as const;
   }
 
   async applyFont(fontFamily: string): Promise<void> {
-    if (fontFamily !== 'Inter var') {
+    document.body.style.fontFamily = resolveFontStack(fontFamily);
+    if (fontFamily !== 'system-ui' && fontFamily !== 'Inter var') {
       await this.loadFont(fontFamily, 400);
       await this.loadFont(fontFamily, 500);
       await this.loadFont(fontFamily, 600);
       await this.loadFont(fontFamily, 700);
-    } else {
-      document.body.style.fontFamily = '"Inter var", sans-serif';
     }
   }
 
-  async loadFont(fontFamily: string, weight: number): Promise<FontFace | undefined> {
+  async loadFont(
+    fontFamily: string,
+    weight: number,
+    applyToBody = true,
+  ): Promise<FontFace | undefined> {
     try {
       const fontFamilyPath = fontFamily.toLowerCase().replace(/\s+/g, '-');
       const fontUrl = `https://fonts.bunny.net/${fontFamilyPath}/files/${fontFamilyPath}-latin-${weight}-normal.woff2`;
@@ -251,7 +289,9 @@ export default ${presetJson} as const;
 
       const loadedFont = await font.load();
       document.fonts.add(loadedFont);
-      document.body.style.fontFamily = `"${fontFamily}", sans-serif`;
+      if (applyToBody) {
+        document.body.style.fontFamily = `"${fontFamily}", sans-serif`;
+      }
       return loadedFont;
     } catch {
       // silent fail -- some fonts may not have all weights

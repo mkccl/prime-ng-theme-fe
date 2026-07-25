@@ -32,23 +32,47 @@ describe('CreateTheme', () => {
     expect(input.placeholder).toBe('My Custom Theme');
   });
 
-  it('should render four preset buttons', () => {
-    const buttons = el.querySelectorAll('section button[type="button"]');
+  it('should render a custom foundation and three starter theme choices', () => {
+    const buttons = el.querySelectorAll('.starter-option');
     expect(buttons.length).toBe(4);
     const labels = Array.from(buttons).map((b) => b.textContent?.trim());
-    expect(labels).toEqual(['Aura', 'Material', 'Lara', 'Nora']);
+    expect(labels[0]).toContain('Custom');
+    expect(labels[1]).toContain('shadcn');
+    expect(labels[2]).toContain('Bootstrap');
+    expect(labels[3]).toContain('Material');
+    expect(buttons[0].getAttribute('aria-checked')).toBe('true');
   });
 
-  it('should render Create Theme button', () => {
+  it('should render the customization action', () => {
     const createBtn = Array.from(el.querySelectorAll('button[type="button"]')).find((b) =>
-      b.textContent?.includes('Create Theme'),
+      b.textContent?.includes('Start customizing'),
     );
     expect(createBtn).toBeTruthy();
   });
 
-  it('should disable Create Theme button when name is empty', () => {
+  it('should apply the selected starter to the live preview immediately', () => {
+    const previewSpy = vi.spyOn(service, 'previewThemeFromPreset');
+    const bootstrapOption = Array.from(el.querySelectorAll('.starter-option')).find((button) =>
+      button.textContent?.includes('Bootstrap'),
+    ) as HTMLButtonElement;
+
+    bootstrapOption.click();
+    fixture.detectChanges();
+
+    expect(bootstrapOption.getAttribute('aria-checked')).toBe('true');
+    expect(previewSpy).toHaveBeenCalledWith(
+      'Bootstrap',
+      expect.any(Object),
+      expect.objectContaining({ fontFamily: 'system-ui' }),
+    );
+    expect(service.previewThemeName()).toBe('Bootstrap');
+    expect(service.previewFontSize()).toBe('16px');
+    expect(getComputedStyle(document.documentElement).fontSize).toBe('14px');
+  });
+
+  it('should disable the customization action when name is empty', () => {
     const createBtn = Array.from(el.querySelectorAll('button[type="button"]')).find((b) =>
-      b.textContent?.includes('Create Theme'),
+      b.textContent?.includes('Start customizing'),
     ) as HTMLButtonElement;
     expect(createBtn.disabled).toBe(true);
   });
@@ -61,7 +85,7 @@ describe('CreateTheme', () => {
 
   it('should disable Import button when import value is empty', () => {
     const importBtn = Array.from(el.querySelectorAll('button[type="button"]')).find((b) =>
-      b.textContent?.includes('Import'),
+      b.textContent?.includes('Import theme'),
     ) as HTMLButtonElement;
     expect(importBtn.disabled).toBe(true);
   });
@@ -84,7 +108,7 @@ describe('CreateTheme', () => {
     fixture.detectChanges();
 
     const importBtn = Array.from(el.querySelectorAll('button[type="button"]')).find((b) =>
-      b.textContent?.includes('Import'),
+      b.textContent?.includes('Import theme'),
     ) as HTMLButtonElement;
     importBtn.click();
     fixture.detectChanges();
@@ -94,7 +118,7 @@ describe('CreateTheme', () => {
     expect(service.designer().theme!.name).toBe('My Imported Theme');
 
     // Should not show error
-    const errorMsg = el.querySelector('p.text-red-500');
+    const errorMsg = el.querySelector('p.import-error');
     expect(errorMsg).toBeNull();
   });
 
@@ -110,13 +134,13 @@ describe('CreateTheme', () => {
 
     // Click the import button
     const importBtn = Array.from(el.querySelectorAll('button[type="button"]')).find((b) =>
-      b.textContent?.includes('Import'),
+      b.textContent?.includes('Import theme'),
     ) as HTMLButtonElement;
     importBtn.click();
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const errorMsg = el.querySelector('p.text-red-500');
+    const errorMsg = el.querySelector('p.import-error');
     expect(errorMsg).toBeTruthy();
     expect(errorMsg?.textContent).toContain('Invalid theme token');
   });

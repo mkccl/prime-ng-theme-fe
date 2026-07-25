@@ -1,0 +1,80 @@
+<div class="create-theme">
+  <header class="create-header">
+    <span class="create-eyebrow">Start with a foundation</span>
+    <h2>Create your theme</h2>
+    <p>Pick a proven visual language, then make every token your own.</p>
+  </header>
+
+  <section class="create-section" aria-labelledby="starter-label">
+    <div class="section-label" id="starter-label">Starter theme</div>
+    <div class="starter-list" role="radiogroup" aria-labelledby="starter-label">
+      @for (theme of starterThemes; track theme.id) {
+        <button
+          type="button"
+          class="starter-option"
+          [class.starter-option-selected]="selectedStarter() === theme.id"
+          [style.--starter-accent]="theme.accent"
+          [style.--starter-soft]="theme.accentSoft"
+          [style.--starter-radius]="theme.radius"
+          role="radio"
+          [attr.aria-checked]="selectedStarter() === theme.id"
+          (click)="selectStarter(theme.id)"
+        >
+          <span class="starter-preview" aria-hidden="true">
+            <span class="preview-nav"></span>
+            <span class="preview-copy">
+              <span></span>
+              <span></span>
+            </span>
+            <span class="preview-control"></span>
+          </span>
+          <span class="starter-copy">
+            <strong>{{ theme.name }}</strong>
+            <small>{{ theme.bestFor }}</small>
+          </span>
+          <i class="pi pi-check" aria-hidden="true"></i>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="create-section">
+    <label class="section-label" for="theme-name">Theme name</label>
+    <input
+      id="theme-name"
+      [(ngModel)]="themeName"
+      type="text"
+      placeholder="My Custom Theme"
+      maxlength="25"
+      autocomplete="off"
+    />
+  </section>
+
+  <button type="button" class="create-action" (click)="create()" [disabled]="!themeName().trim()">
+    Start customizing
+    <i class="pi pi-arrow-right" aria-hidden="true"></i>
+  </button>
+
+  <details class="import-section">
+    <summary>
+      <span><i class="pi pi-upload" aria-hidden="true"></i> Import an existing theme</span>
+      <i class="pi pi-chevron-down" aria-hidden="true"></i>
+    </summary>
+    <div class="import-content">
+      <p>Paste a base64 theme token to continue working on a previous export.</p>
+      <textarea
+        [(ngModel)]="importValue"
+        rows="4"
+        placeholder="Paste base64 theme token here..."
+      ></textarea>
+      @if (importError()) {
+        <p class="import-error">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>{{ importError() }}
+        </p>
+      }
+      <button type="button" (click)="importTheme()" [disabled]="!importValue().trim()">
+        Import theme
+      </button>
+    </div>
+  </details>
+</div>

@@ -1,13 +1,15 @@
-# PrimeNG Theme Studio
+# Theme Studio
 
-A visual design editor for creating production-ready [PrimeNG](https://primeng.org/) themes.
+An independent visual design editor for creating production-ready
+[PrimeNG](https://primeng.org/) themes.
 Start from an official preset, edit its design tokens, inspect the result in a live PrimeNG
 preview, and export a typed preset that can be owned and maintained with the rest of your Angular
 application.
 
-[Live demo](https://prime-ng-theme-fe.vercel.app/) · [Designer](https://prime-ng-theme-fe.vercel.app/designer) · [Changelog](https://prime-ng-theme-fe.vercel.app/changelog)
+Theme Studio is not affiliated with or endorsed by PrimeTek. PrimeNG is referenced only to
+describe compatibility with the PrimeNG component library.
 
-![Theme Studio landing page](docs/landing.png)
+[Live demo](https://prime-ng-theme-fe.vercel.app/) · [Designer](https://prime-ng-theme-fe.vercel.app/designer) · [Changelog](https://prime-ng-theme-fe.vercel.app/changelog)
 
 ## What Theme Studio does
 

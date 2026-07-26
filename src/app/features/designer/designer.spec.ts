@@ -41,6 +41,13 @@ describe('Designer', () => {
     expect(darkBtn).toBeTruthy();
   });
 
+  it('should use the independent Theme Studio brand mark', () => {
+    const logo = el.querySelector<HTMLImageElement>('.designer-logo-icon');
+
+    expect(logo?.getAttribute('src')).toBe('/favicon.svg');
+    expect(el.querySelector('.pi-prime')).toBeNull();
+  });
+
   it('should show create-theme component in create view', () => {
     const createTheme = el.querySelector('design-create-theme');
     expect(createTheme).toBeTruthy();

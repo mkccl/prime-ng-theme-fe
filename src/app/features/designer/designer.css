@@ -29,8 +29,9 @@
 }
 
 .designer-logo-icon {
-  font-size: 1.25rem;
-  color: var(--p-primary-color);
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .designer-logo-text {

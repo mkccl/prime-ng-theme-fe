@@ -34,7 +34,9 @@ describe('Landing', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     expect(el.querySelectorAll('h1').length).toBe(1);
-    expect(el.querySelector('#hero-title')?.textContent).toContain('Visual Theme Studio');
+    expect(el.querySelector('#hero-title')?.textContent).toContain(
+      'Design PrimeNG themes visually',
+    );
     expect(el.querySelector('app-live-dashboard')).toBeTruthy();
     expect(el.querySelectorAll('.feature-card').length).toBe(4);
     expect(el.querySelector('.feature-card')?.textContent).toContain('Design Editor');
@@ -53,6 +55,19 @@ describe('Landing', () => {
 
     expect(starCount.textContent).toContain('42');
     expect(starCount.getAttribute('aria-label')).toBe('42 GitHub stars');
+  });
+
+  it('uses independent branding and discloses non-affiliation', async () => {
+    const fixture = TestBed.createComponent(Landing);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('.brand')?.textContent).toContain('THEME STUDIO');
+    expect(el.querySelector('.footer-disclaimer')?.textContent).toContain(
+      'Not affiliated with or endorsed by PrimeTek',
+    );
+    expect(el.querySelector('.pi-prime')).toBeNull();
   });
 
   it('offers three starter themes and a custom theme entry', async () => {

@@ -598,6 +598,7 @@
 
 .footer-brand { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--p-text-color); text-decoration: none; }
 .footer-bottom img { display: block; }
+.footer-disclaimer { max-width: 38rem; line-height: 1.5; }
 .footer-socials { display: flex; gap: 0.5rem; margin-left: auto; }
 .footer-socials a {
   display: grid;

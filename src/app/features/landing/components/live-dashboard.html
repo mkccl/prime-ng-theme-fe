@@ -1,6 +1,6 @@
 <div class="overview-app" aria-label="Interactive finance dashboard sample">
   <aside class="overview-sidebar" aria-label="Finance dashboard navigation">
-    <div class="overview-logo"><i class="pi pi-prime" aria-hidden="true"></i></div>
+    <div class="overview-logo"><i class="pi pi-sliders-h" aria-hidden="true"></i></div>
     <nav>
       @for (item of ['Overview', 'Chat', 'Inbox', 'Applications', 'Customers', 'Media']; track item; let i = $index) {
         <button type="button" [class.active]="activeNav() === item" [attr.aria-label]="item" (click)="activeNav.set(item)">
